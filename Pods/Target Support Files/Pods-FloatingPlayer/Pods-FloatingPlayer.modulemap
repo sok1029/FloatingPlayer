@@ -1,0 +1,6 @@
+framework module Pods_FloatingPlayer {
+  umbrella header "Pods-FloatingPlayer-umbrella.h"
+
+  export *
+  module * { export * }
+}
