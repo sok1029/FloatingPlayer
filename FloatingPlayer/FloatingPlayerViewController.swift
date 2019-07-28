@@ -12,18 +12,14 @@ import RxSwift
 class FloatingPlayerViewController: UIViewController {
     //    let disposeBag = DisposeBag()
     var currentOrientationSubject = PublishSubject<UIDeviceOrientation>()
-    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         currentOrientationSubject.onNext(UIDevice.current.orientation)
     }
-    /*
-     // Only override draw() if you perform custom drawing.
-     // An empty implementation adversely affects performance during animation.
-     override func draw(_ rect: CGRect) {
-     // Drawing code
-     }
-     */
-    
+
 }
+

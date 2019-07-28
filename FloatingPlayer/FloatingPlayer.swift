@@ -42,17 +42,13 @@ public class FloatingPlayer {
     private var floatingPlayerViewController: FloatingPlayerViewController?
     
     var delegate: PlayerEventDelegate?
-    var type: FloatingType = .left
+    var floatingType: FloatingType = .left
+    var floatingLocationYInScreen: CGFloat = 0
     var isPlaying: Bool = false
     var floatingImage: UIImage?
-    
-    //    var topLimit: CGFloat?
-    //    var bottomLimit: CGFloat?
-    
-    //    public init(with view: UIButton) {
+
     public init(imgName: String? = nil) {
         self.appWindow = UIApplication.shared.keyWindow
-        
         //Button
         let button: UIButton = UIButton(type: UIButton.ButtonType.custom)
         button.backgroundColor = .yellow
@@ -75,73 +71,42 @@ public class FloatingPlayer {
             button.setImage(image, for: .normal)
             floatingImage = image
         }
-        
         //floatingWindow
-        
         makeFloatingView(with: button)
         
         floatingPlayerViewController?.currentOrientationSubject.subscribe(onNext: { [weak self] (orientation) in
             guard let strongSelf = self else{ return}
-            strongSelf.floatingWindow?.isHidden = true
+            strongSelf.floatingWindow?.alpha = 0
             
         }).disposed(by: disposeBag)
-        
-        floatingPlayerViewController?.currentOrientationSubject.delay(1, scheduler: MainScheduler.instance).subscribe(onNext: { [weak self] (orientation) in
-            print("event in")
-            
+        // when transitiong orientation window's center auto change by system.
+        // so setting new frame after transitioning by delay operator
+
+        floatingPlayerViewController?.currentOrientationSubject.delay(0.35, scheduler:  MainScheduler.instance).subscribe(onNext: { [weak self] (orientation) in
             guard let strongSelf = self else{ return}
-            strongSelf.floatingWindow?.isHidden = false
-            strongSelf.floatingWindow!.center  = CGPoint(x: 100, y: 100)
-            
-            //            let centerPoint = strongSelf.floatingWindow!.center
-            //
-            //            if orientation == .landscapeLeft{
-            //                strongSelf.floatingWindow!.center  = CGPoint(x: 100, y: 100)
-            ////                strongSelf.floatingWindow!.center = CGPoint(x: (strongSelf.appWindow?.frame.size.height)! - centerPoint.y, y: centerPoint.x)
-            //                print("landscapeLeft")
-            //            }
-            //            else if orientation == .landscapeRight{
-            //                strongSelf.floatingWindow!.center = CGPoint(x: centerPoint.y, y: (strongSelf.appWindow?.frame.size.width)! - centerPoint.x)
-            //                print("landscapeRIght")
-            //            }
-            //            else {
-            //                print("portrait")
-            //            }
-            
-            
+            strongSelf.floatingWindow!.center  = strongSelf.getSettledFloatingWindowCenterPoint()
+            UIView.animate(withDuration: 0.05, delay:0.0,animations: {
+                strongSelf.floatingWindow?.alpha = 1
+            })
+
         }).disposed(by: disposeBag)
     }
     
-    //    private func reMakeFloatingView(){
-    //        removeFloatingView()
-    //        makeFloatingView(with: floatingButton)
-    //    }
-    func test(){
-        floatingWindow!.center  = CGPoint(x: 100, y: 100)
-    }
     private func makeFloatingView(with button: UIButton){
-        self.floatingWindow = FloatingWindow(frame: CGRect.init(origin: CGPoint(x: 0, y: getScreenHeight() / 2), size: button.frame.size))
-        self.floatingPlayerViewController = FloatingPlayerViewController()
-        self.floatingWindow?.rootViewController = floatingPlayerViewController
-        self.floatingWindow?.topView = button
-        
-        //        self.floatingWindow?.rootViewController?.view = button
-        self.floatingWindow?.windowLevel = .normal
-        self.floatingWindow?.backgroundColor = .red
+        let window =  FloatingWindow(frame: CGRect.init(origin: CGPoint(x: 0, y: getScreenHeight() / 2), size: button.frame.size))
+        floatingPlayerViewController = FloatingPlayerViewController()
+        window.rootViewController = floatingPlayerViewController
+        window.topView = button
+        window.windowLevel = .normal
+        window.backgroundColor = .clear
+        floatingLocationYInScreen = getLocationYInScreen(view: window)
+        floatingWindow = window
     }
-    
-    //    private func removeFloatingView(){
-    //        self.floatingButton.removeFromSuperview()
-    ////        self.floatingWindow?.isHidden = true
-    ////        self.floatingWindow?.rootViewController?.view = nil
-    ////        self.floatingWindow?.removeFromSuperview()
-    //    }
     
     public func show() {
         if self.isShowing { return }
         self.floatingWindow?.makeKeyAndVisible()
         self.floatingWindow?.addSubview(self.floatingButton)
-        //        self.floatingWindow?.transform = CGAffineTransform( rotationAngle: CGFloat( -90 * M_PI / 180));
         self.isShowing = true
         floatingWindow?.isHidden = false
     }
@@ -162,14 +127,18 @@ public class FloatingPlayer {
         }
         else if panGesture.state == .ended {
             let location = panGesture.location(in: self.floatingButton)
-            let point = getfloatingWindowCenterPoint(with: location)
+            let point = getFloatingWindowCenterPoint(with: location)
             let viewHalfWidth = self.floatingButton.frame.size.width / 2.0
             //left,right decision
             UIView.animate(withDuration: 0.2, delay: 0.0, options: [.beginFromCurrentState,.curveEaseInOut], animations: { [weak self] in
                 guard let strongSelf = self else {return}
                 let isOverHalf = point.x < strongSelf.getScreenWidth() / 2.0 ? false : true
-                strongSelf.type = isOverHalf ? .right : .left
-                strongSelf.floatingWindow?.center = isOverHalf ? CGPoint(x: strongSelf.getScreenWidth() - viewHalfWidth, y: point.y): CGPoint(x: viewHalfWidth, y: point.y)
+                strongSelf.floatingType = isOverHalf ? .right : .left
+                
+                if let window = strongSelf.floatingWindow{
+                    window.center = isOverHalf ? CGPoint(x: strongSelf.getScreenWidth() - viewHalfWidth, y: point.y): CGPoint(x: viewHalfWidth, y: point.y)
+                    strongSelf.floatingLocationYInScreen = strongSelf.getLocationYInScreen(view: window)
+                }
             })
         }
         else if panGesture.state == .changed {
@@ -182,12 +151,12 @@ public class FloatingPlayer {
     private func viewDidMove(to location:CGPoint) {
         UIView.animate(withDuration: 0.1, delay: 0.0, options: [.beginFromCurrentState,.curveEaseInOut], animations: {[weak self] in
             guard let strongSelf = self else{return}
-            let point = strongSelf.getfloatingWindowCenterPoint(with: location)
+            let point = strongSelf.getFloatingWindowCenterPoint(with: location)
             strongSelf.floatingWindow?.center = point
         })
     }
     
-    private func getfloatingWindowCenterPoint(with location: CGPoint) -> CGPoint{
+    private func getFloatingWindowCenterPoint(with location: CGPoint) -> CGPoint{
         var centerPoint: CGPoint = (floatingWindow?.convert(location, to: appWindow))!
         //limit
         let viewHalfHeight = floatingButton.frame.size.height / 2.0
@@ -197,29 +166,24 @@ public class FloatingPlayer {
         let topLimitY = topInset + viewHalfHeight
         let bottomLimitY = getScreenHeight() - bottomInset - viewHalfHeight
         
-        print("centerPoint.y:\(centerPoint.y)")
-        print("centerPoint.x:\(centerPoint.x)")
-        
-        //                if centerPoint.y > bottomLimitY{
-        //                    centerPoint = CGPoint(x: centerPoint.x, y: bottomLimitY)
-        //                }
-        //                else if centerPoint.y < topLimitY{
-        //                    centerPoint = CGPoint(x: centerPoint.x, y: topLimitY)
-        //                }
-        //
-        switch UIDevice.current.orientation {
-        case .landscapeLeft :
-            centerPoint = CGPoint(x: (self.appWindow?.frame.size.height)! - centerPoint.y, y: centerPoint.x)
-        case .landscapeRight :
-            centerPoint = CGPoint(x: centerPoint.y, y: (self.appWindow?.frame.size.width)! - centerPoint.x)
-        default :
-            break
+        if centerPoint.y > bottomLimitY{
+            centerPoint = CGPoint(x: centerPoint.x, y: bottomLimitY)
         }
-        
-        
-        
+        else if centerPoint.y < topLimitY{
+            centerPoint = CGPoint(x: centerPoint.x, y: topLimitY)
+        }
+
         return centerPoint
     }
+    
+    private func getSettledFloatingWindowCenterPoint() -> CGPoint{
+        let halfWidthOfWindow = self.floatingWindow!.topView.frame.size.width / 2.0
+        let centerX = (floatingType == .left) ? halfWidthOfWindow : getScreenWidth() - halfWidthOfWindow
+        let centerY = floatingLocationYInScreen * getScreenHeight()
+        
+        return CGPoint(x: centerX, y: centerY)
+    }
+
     
     private func playerBtnTouched(){
         if !dragging{
@@ -233,7 +197,7 @@ public class FloatingPlayer {
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             if let window = appDelegate.window{
                 hide()
-                addPlayerView(type)
+                addPlayerView(floatingType)
                 if let image = floatingImage{
                     playerView!.setImage(image: image)
                 }
@@ -248,11 +212,11 @@ public class FloatingPlayer {
                 playerView?.setPlayButton(isPlaying: isPlaying)
                 playerSuperView = view
                 //miniPlayerView + animation
-                if type == .left{
+                if floatingType == .left{
                     let moveX: CGFloat = 10
                     self.playerView?.controlViewLeadingConstraint.constant += moveX
                 }
-                else if type == .right{
+                else if floatingType == .right{
                     
                 }
                 
@@ -288,6 +252,10 @@ public class FloatingPlayer {
         removePlayerView()
     }
     
+    private func getLocationYInScreen(view: UIView) -> CGFloat{
+        return view.center.y / getScreenHeight()
+    }
+
     private func getScreenWidth() -> CGFloat {
         let screenSize = UIScreen.main.bounds
         return screenSize.width

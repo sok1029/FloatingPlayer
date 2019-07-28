@@ -16,9 +16,6 @@ class ViewController: UIViewController {
         super.viewDidLoad()
     }
     
-    @IBAction func centerChange(_ sender: Any) {
-        floatingPlayer.test()
-    }
     @IBAction func showBtnTouched(_ sender: Any) {
         floatingPlayer.delegate = self
         floatingPlayer.show()
