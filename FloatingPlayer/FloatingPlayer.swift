@@ -103,7 +103,7 @@ public class FloatingPlayer {
         floatingWindow = window
     }
     
-    public func show() {
+    public func floatingWindowShow() {
         if self.isShowing { return }
         self.floatingWindow?.makeKeyAndVisible()
         self.floatingWindow?.addSubview(self.floatingButton)
@@ -111,7 +111,7 @@ public class FloatingPlayer {
         floatingWindow?.isHidden = false
     }
     
-    public func hide() {
+    public func floatingWindowHide() {
         self.isShowing = false
         floatingWindow?.isHidden = true
     }
@@ -196,50 +196,42 @@ public class FloatingPlayer {
         if isShowing{
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             if let window = appDelegate.window{
-                hide()
-                addPlayerView(floatingType)
-                if let image = floatingImage{
-                    playerView!.setImage(image: image)
-                }
+                floatingWindowHide()
                 //background diableView
                 let view = UIView(frame: window.bounds)
-                view.addSubview(playerView!)
                 window.addSubview(view);
                 view.backgroundColor = UIColor.clear
                 let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(foldPlayerView(_:)))
                 view.addGestureRecognizer(gestureRecognizer)
-                //set play Button
-                playerView?.setPlayButton(isPlaying: isPlaying)
                 playerSuperView = view
-                //miniPlayerView + animation
-                if floatingType == .left{
-                    let moveX: CGFloat = 10
-                    self.playerView?.controlViewLeadingConstraint.constant += moveX
+                let playerView = makePlayerView()
+                view.addSubview(playerView)
+                //playerView
+                if let image = floatingImage{
+                    playerView.setStartButtonImage(image: image)
                 }
-                else if floatingType == .right{
-                    
-                }
-                
-                self.playerView?.layoutIfNeeded()
-                
+                playerView.setPlayButtonImage(isPlaying: isPlaying)
+                playerView.moveAnimation()
+                self.playerView = playerView
+
                 UIView.animate(withDuration: 0.15, delay: 0.0, options: [.beginFromCurrentState,.curveEaseInOut], animations: {
                     view.backgroundColor = UIColor.init(white: 0.0, alpha: 0.65)
                 })
-                
             }
         }
     }
     
-    private func addPlayerView(_ type: FloatingType){
+    private func makePlayerView() -> PlayerView{
         let floatingViewFrame = getFloatingViewFrame()
-        let frame: CGRect = CGRect(x: floatingViewFrame.origin.x, y: floatingViewFrame.origin.y, width: getScreenWidth(), height: playerButtonWidthHeight)
+        let frame: CGRect = CGRect(x: 0, y: floatingViewFrame.origin.y, width: getScreenWidth(), height: playerButtonWidthHeight)
         
-        playerView = PlayerView(frame: frame,type: type)
-        playerView?.delegate = delegate
+        let playerView = PlayerView(frame: frame,type: floatingType)
+        playerView.delegate = delegate
         //        miniPlayerView?.prevMoveButton.isEnabled = WelaaaPlayerMangager.shared.isPrevItem()
         //        miniPlayerView?.nextMoveButton.isEnabled = WelaaaPlayerMangager.shared.isNextItem()
         
         //        miniPlayerView?.delegate = self
+        return playerView
     }
     
     func removePlayerView(){
@@ -248,7 +240,7 @@ public class FloatingPlayer {
     }
     
     @objc func foldPlayerView(_ sender: UITapGestureRecognizer){
-        show()
+        floatingWindowShow()
         removePlayerView()
     }
     

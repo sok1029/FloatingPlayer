@@ -20,6 +20,5 @@ class FloatingPlayerViewController: UIViewController {
         super.viewWillTransition(to: size, with: coordinator)
         currentOrientationSubject.onNext(UIDevice.current.orientation)
     }
-
 }
 

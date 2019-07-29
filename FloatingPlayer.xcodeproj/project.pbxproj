@@ -130,9 +130,9 @@
 				3ED6AADC22ED4A5500C650B0 /* FloatingPlayer.swift */,
 				3EC77B5622ED4C1E004C2033 /* PlayerView.swift */,
 				3EC77B5A22ED4CE6004C2033 /* PlayerView.xib */,
+				3EC77B5C22ED4D0C004C2033 /* FloatingPlayerViewController.swift */,
 				3ED6AAB722ED499D00C650B0 /* LaunchScreen.storyboard */,
 				3ED6AABA22ED499D00C650B0 /* Info.plist */,
-				3EC77B5C22ED4D0C004C2033 /* FloatingPlayerViewController.swift */,
 				3EC77B5E22ED4D1F004C2033 /* test.jpg */,
 				3ED6AAB522ED499D00C650B0 /* Assets.xcassets */,
 			);

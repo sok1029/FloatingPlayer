@@ -18,11 +18,11 @@ class ViewController: UIViewController {
     
     @IBAction func showBtnTouched(_ sender: Any) {
         floatingPlayer.delegate = self
-        floatingPlayer.show()
+        floatingPlayer.floatingWindowShow()
     }
     
     @IBAction func hideBtnTouched(_ sender: Any) {
-        floatingPlayer.hide()
+        floatingPlayer.floatingWindowHide()
     }
 }
 
