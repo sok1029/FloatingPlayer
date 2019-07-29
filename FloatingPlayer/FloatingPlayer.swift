@@ -9,7 +9,7 @@ import RxSwift
 import RxCocoa
 
 enum FloatingType{
-    case left,right
+    case left, right
 }
 
 class FloatingWindow : UIWindow {
@@ -32,61 +32,66 @@ class FloatingWindow : UIWindow {
 public class FloatingPlayer {
     let disposeBag = DisposeBag()
     
-    private var floatingWindow: FloatingWindow?
-    private var appWindow: UIWindow?
+    private var appWindow: UIWindow!
+    private var fltWindow: FloatingWindow!
+    private var fltButton: UIButton!
+
+    private var isPlaying: Bool = false
     private var dragging: Bool = false
-    private var floatingButton: UIButton!
     private var isShowing = false
+
     private var playerSuperView: UIView?
     private var playerView: PlayerView?
-    private var floatingPlayerViewController: FloatingPlayerViewController?
     
+    private var fltPlayerViewController: FloatingPlayerViewController?
+    
+    private var fltType: FloatingType = .left
+    private var fltLocYInScreen: CGFloat = 0
+
     var delegate: PlayerEventDelegate?
-    var floatingType: FloatingType = .left
-    var floatingLocationYInScreen: CGFloat = 0
-    var isPlaying: Bool = false
-    var floatingImage: UIImage?
 
     public init(imgName: String? = nil) {
         self.appWindow = UIApplication.shared.keyWindow
         //Button
-        let button: UIButton = UIButton(type: UIButton.ButtonType.custom)
-        button.backgroundColor = .yellow
-        button.frame = CGRect(x: 0, y: 0, width: playerButtonWidthHeight, height: playerButtonWidthHeight)
-        button.layer.cornerRadius = playerButtonWidthHeight / 2
-        button.clipsToBounds = true
-        button.rx.controlEvent([.touchUpInside])
-            .subscribe(onNext: { [weak self]  in
-                self?.playerBtnTouched()
-            })
-            .disposed(by: disposeBag)
-        let panGesture = UIPanGestureRecognizer(target: self, action:#selector(handlePanGesture(panGesture:)))
-        panGesture.cancelsTouchesInView = false
-        button.addGestureRecognizer(panGesture)
+        self.fltButton = {
+            let button = UIButton(type: UIButton.ButtonType.custom)
+            button.backgroundColor = .yellow
+            button.frame = CGRect(x: 0, y: 0, width: playerButtonWidthHeight, height: playerButtonWidthHeight)
+            button.layer.cornerRadius = playerButtonWidthHeight / 2
+            button.clipsToBounds = true
+            button.rx.controlEvent([.touchUpInside])
+                .subscribe(onNext: { [weak self]  in
+                    self?.playerBtnTouched()
+                })
+                .disposed(by: disposeBag)
+            let panGesture = UIPanGestureRecognizer(target: self, action:#selector(handlePanGesture(panGesture:)))
+            panGesture.cancelsTouchesInView = false
+            button.addGestureRecognizer(panGesture)
+            
+            if let imgName = imgName{
+                let image = UIImage(named: imgName)
+                button.setImage(image, for: .normal)
+            }
+            return button
+        }()
         
-        self.floatingButton = button
-        
-        if let imgName = imgName{
-            let image = UIImage(named: imgName)
-            button.setImage(image, for: .normal)
-            floatingImage = image
-        }
         //floatingWindow
-        makeFloatingView(with: button)
+        makeFloatingView(with: fltButton)
         
-        floatingPlayerViewController?.currentOrientationSubject.subscribe(onNext: { [weak self] (orientation) in
-            guard let strongSelf = self else{ return}
-            strongSelf.floatingWindow?.alpha = 0
+        //floatinPlayerViewController
+        fltPlayerViewController?.currentOrientationSubject.subscribe(onNext: { [weak self] (orientation) in
+            guard let sSelf = self else{ return}
+            sSelf.fltWindow.alpha = 0
             
         }).disposed(by: disposeBag)
         // when transitiong orientation window's center auto change by system.
         // so setting new frame after transitioning by delay operator
 
-        floatingPlayerViewController?.currentOrientationSubject.delay(0.35, scheduler:  MainScheduler.instance).subscribe(onNext: { [weak self] (orientation) in
-            guard let strongSelf = self else{ return}
-            strongSelf.floatingWindow!.center  = strongSelf.getSettledFloatingWindowCenterPoint()
+        fltPlayerViewController?.currentOrientationSubject.delay(0.35, scheduler:  MainScheduler.instance).subscribe(onNext: { [weak self] (orientation) in
+            guard let sSelf = self else{ return}
+            sSelf.fltWindow.center  = sSelf.getSettledFloatingWindowCenterPoint()
             UIView.animate(withDuration: 0.05, delay:0.0,animations: {
-                strongSelf.floatingWindow?.alpha = 1
+                sSelf.fltWindow.alpha = 1
             })
 
         }).disposed(by: disposeBag)
@@ -94,31 +99,26 @@ public class FloatingPlayer {
     
     private func makeFloatingView(with button: UIButton){
         let window =  FloatingWindow(frame: CGRect.init(origin: CGPoint(x: 0, y: getScreenHeight() / 2), size: button.frame.size))
-        floatingPlayerViewController = FloatingPlayerViewController()
-        window.rootViewController = floatingPlayerViewController
+        fltPlayerViewController = FloatingPlayerViewController()
+        window.rootViewController = fltPlayerViewController
         window.topView = button
         window.windowLevel = .normal
         window.backgroundColor = .clear
-        floatingLocationYInScreen = getLocationYInScreen(view: window)
-        floatingWindow = window
+        fltLocYInScreen = getLocationYInScreen(view: window)
+        fltWindow = window
     }
     
     public func floatingWindowShow() {
-        if self.isShowing { return }
-        self.floatingWindow?.makeKeyAndVisible()
-        self.floatingWindow?.addSubview(self.floatingButton)
-        self.isShowing = true
-        floatingWindow?.isHidden = false
+        if isShowing { return }
+        fltWindow.makeKeyAndVisible()
+        fltWindow.addSubview(fltButton)
+        isShowing = true
+        fltWindow.isHidden = false
     }
     
     public func floatingWindowHide() {
         self.isShowing = false
-        floatingWindow?.isHidden = true
-    }
-    
-    public func getFloatingViewFrame() -> CGRect{
-        let point = (self.floatingButton?.convert(self.floatingButton.frame.origin, to: self.appWindow))!
-        return CGRect(x: point.x, y: point.y, width: floatingButton.frame.width, height: floatingButton.frame.height)
+        fltWindow.isHidden = true
     }
     
     @objc private func handlePanGesture(panGesture: UIPanGestureRecognizer) {
@@ -126,64 +126,32 @@ public class FloatingPlayer {
             dragging = true
         }
         else if panGesture.state == .ended {
-            let location = panGesture.location(in: self.floatingButton)
+            let location = panGesture.location(in: fltButton)
             let point = getFloatingWindowCenterPoint(with: location)
-            let viewHalfWidth = self.floatingButton.frame.size.width / 2.0
+            let viewHalfWidth = fltButton.frame.size.width / 2.0
+            
+            let isOverHalf = point.x < getScreenWidth() / 2.0 ? false : true
+            fltType = isOverHalf ? .right : .left
+            fltLocYInScreen = getLocationYInScreen(view: fltWindow)
+
             //left,right decision
             UIView.animate(withDuration: 0.2, delay: 0.0, options: [.beginFromCurrentState,.curveEaseInOut], animations: { [weak self] in
-                guard let strongSelf = self else {return}
-                let isOverHalf = point.x < strongSelf.getScreenWidth() / 2.0 ? false : true
-                strongSelf.floatingType = isOverHalf ? .right : .left
-                
-                if let window = strongSelf.floatingWindow{
-                    window.center = isOverHalf ? CGPoint(x: strongSelf.getScreenWidth() - viewHalfWidth, y: point.y): CGPoint(x: viewHalfWidth, y: point.y)
-                    strongSelf.floatingLocationYInScreen = strongSelf.getLocationYInScreen(view: window)
-                }
+                guard let sSelf = self else {return}
+                sSelf.fltWindow.center = isOverHalf ?
+                    CGPoint(x: sSelf.getScreenWidth() - viewHalfWidth, y: point.y):
+                    CGPoint(x: viewHalfWidth, y: point.y)
             })
         }
         else if panGesture.state == .changed {
-            let translation = panGesture.location(in: self.floatingButton)
-            self.viewDidMove(to: translation)
+            let location = panGesture.location(in: fltButton)
+            
+            UIView.animate(withDuration: 0.1, delay: 0.0, options: [.beginFromCurrentState,.curveEaseInOut], animations: {[weak self] in
+                guard let sSelf = self else{return}
+                let point = sSelf.getFloatingWindowCenterPoint(with: location)
+                sSelf.fltWindow.center = point
+            })
         }
     }
-    
-    // Handleing movement of view
-    private func viewDidMove(to location:CGPoint) {
-        UIView.animate(withDuration: 0.1, delay: 0.0, options: [.beginFromCurrentState,.curveEaseInOut], animations: {[weak self] in
-            guard let strongSelf = self else{return}
-            let point = strongSelf.getFloatingWindowCenterPoint(with: location)
-            strongSelf.floatingWindow?.center = point
-        })
-    }
-    
-    private func getFloatingWindowCenterPoint(with location: CGPoint) -> CGPoint{
-        var centerPoint: CGPoint = (floatingWindow?.convert(location, to: appWindow))!
-        //limit
-        let viewHalfHeight = floatingButton.frame.size.height / 2.0
-        let topInset = UIApplication.shared.keyWindow?.safeAreaInsets.top ?? 0
-        let bottomInset = UIApplication.shared.keyWindow?.safeAreaInsets.bottom ?? 0
-        //        let tapbbarHeight: CGFloat = 49.0
-        let topLimitY = topInset + viewHalfHeight
-        let bottomLimitY = getScreenHeight() - bottomInset - viewHalfHeight
-        
-        if centerPoint.y > bottomLimitY{
-            centerPoint = CGPoint(x: centerPoint.x, y: bottomLimitY)
-        }
-        else if centerPoint.y < topLimitY{
-            centerPoint = CGPoint(x: centerPoint.x, y: topLimitY)
-        }
-
-        return centerPoint
-    }
-    
-    private func getSettledFloatingWindowCenterPoint() -> CGPoint{
-        let halfWidthOfWindow = self.floatingWindow!.topView.frame.size.width / 2.0
-        let centerX = (floatingType == .left) ? halfWidthOfWindow : getScreenWidth() - halfWidthOfWindow
-        let centerY = floatingLocationYInScreen * getScreenHeight()
-        
-        return CGPoint(x: centerX, y: centerY)
-    }
-
     
     private func playerBtnTouched(){
         if !dragging{
@@ -197,41 +165,49 @@ public class FloatingPlayer {
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             if let window = appDelegate.window{
                 floatingWindowHide()
+                
                 //background diableView
-                let view = UIView(frame: window.bounds)
-                window.addSubview(view);
-                view.backgroundColor = UIColor.clear
+                let bgView = UIView(frame: window.bounds)
+                window.addSubview(bgView);
+                bgView.backgroundColor = UIColor.clear
                 let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(foldPlayerView(_:)))
-                view.addGestureRecognizer(gestureRecognizer)
-                playerSuperView = view
-                let playerView = makePlayerView()
-                view.addSubview(playerView)
-                //playerView
-                if let image = floatingImage{
-                    playerView.setStartButtonImage(image: image)
-                }
-                playerView.setPlayButtonImage(isPlaying: isPlaying)
-                playerView.moveAnimation()
-                self.playerView = playerView
-
+                bgView.addGestureRecognizer(gestureRecognizer)
+                playerSuperView = bgView
+                
                 UIView.animate(withDuration: 0.15, delay: 0.0, options: [.beginFromCurrentState,.curveEaseInOut], animations: {
-                    view.backgroundColor = UIColor.init(white: 0.0, alpha: 0.65)
+                    bgView.backgroundColor = UIColor.init(white: 0.0, alpha: 0.65)
                 })
+                
+                //playerView
+                self.playerView = {
+                    let frame: CGRect =  {
+                        let point = (fltButton.convert(fltButton.frame.origin, to: self.appWindow))
+                        let floatingViewFrame = CGRect(x: point.x, y: point.y, width: fltButton.frame.width, height: fltButton.frame.height)
+                        return CGRect(x: 0, y: floatingViewFrame.origin.y, width: getScreenWidth(), height: playerButtonWidthHeight)
+                    }()
+                    
+                    let playerView = PlayerView(frame: frame,type: fltType)
+                    //image
+                    if let image = fltButton.image(for: .normal){
+                        playerView.setStartButtonImage(image: image)
+                    }
+                    playerView.setPlayButtonImage(isPlaying: isPlaying)
+
+                    //        miniPlayerView?.prevMoveButton.isEnabled = WelaaaPlayerMangager.shared.isPrevItem()
+                    //        miniPlayerView?.nextMoveButton.isEnabled = WelaaaPlayerMangager.shared.isNextItem()
+                    
+                    //        miniPlayerView?.delegate = self
+                    playerView.delegate = delegate
+
+                    return playerView
+                }()
+          
+                if let playerView = self.playerView{
+                    playerView.moveAnimation()
+                    bgView.addSubview(playerView)
+                }
             }
         }
-    }
-    
-    private func makePlayerView() -> PlayerView{
-        let floatingViewFrame = getFloatingViewFrame()
-        let frame: CGRect = CGRect(x: 0, y: floatingViewFrame.origin.y, width: getScreenWidth(), height: playerButtonWidthHeight)
-        
-        let playerView = PlayerView(frame: frame,type: floatingType)
-        playerView.delegate = delegate
-        //        miniPlayerView?.prevMoveButton.isEnabled = WelaaaPlayerMangager.shared.isPrevItem()
-        //        miniPlayerView?.nextMoveButton.isEnabled = WelaaaPlayerMangager.shared.isNextItem()
-        
-        //        miniPlayerView?.delegate = self
-        return playerView
     }
     
     func removePlayerView(){
@@ -246,6 +222,34 @@ public class FloatingPlayer {
     
     private func getLocationYInScreen(view: UIView) -> CGFloat{
         return view.center.y / getScreenHeight()
+    }
+
+    private func getFloatingWindowCenterPoint(with location: CGPoint) -> CGPoint{
+        var centerPoint: CGPoint = fltWindow.convert(location, to: appWindow)
+        //limit
+        let viewHalfHeight = fltButton.frame.size.height / 2.0
+        let topInset = UIApplication.shared.keyWindow?.safeAreaInsets.top ?? 0
+        let bottomInset = UIApplication.shared.keyWindow?.safeAreaInsets.bottom ?? 0
+        //        let tapbbarHeight: CGFloat = 49.0
+        let topLimitY = topInset + viewHalfHeight
+        let bottomLimitY = getScreenHeight() - bottomInset - viewHalfHeight
+        
+        if centerPoint.y > bottomLimitY{
+            centerPoint = CGPoint(x: centerPoint.x, y: bottomLimitY)
+        }
+        else if centerPoint.y < topLimitY{
+            centerPoint = CGPoint(x: centerPoint.x, y: topLimitY)
+        }
+        
+        return centerPoint
+    }
+    
+    private func getSettledFloatingWindowCenterPoint() -> CGPoint{
+        let halfWidthOfWindow = fltWindow.topView.frame.size.width / 2.0
+        let centerX = (fltType == .left) ? halfWidthOfWindow : getScreenWidth() - halfWidthOfWindow
+        let centerY = fltLocYInScreen * getScreenHeight()
+        
+        return CGPoint(x: centerX, y: centerY)
     }
 
     private func getScreenWidth() -> CGFloat {
