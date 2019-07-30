@@ -53,6 +53,9 @@
                                                 <constraint firstAttribute="width" constant="28" id="P2R-O6-EEl"/>
                                             </constraints>
                                             <state key="normal" image="prev"/>
+                                            <connections>
+                                                <action selector="prevBtnTouched:" destination="-1" eventType="touchUpInside" id="j4m-Fj-2rc"/>
+                                            </connections>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A6y-Tq-XR9">
                                             <rect key="frame" x="47" y="0.0" width="28" height="28"/>
@@ -61,6 +64,9 @@
                                                 <constraint firstAttribute="width" constant="28" id="k25-ck-EN9"/>
                                             </constraints>
                                             <state key="normal" image="pause"/>
+                                            <connections>
+                                                <action selector="playPauseBtnTouched:" destination="-1" eventType="touchUpInside" id="34H-uj-wc1"/>
+                                            </connections>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OIz-In-zMA">
                                             <rect key="frame" x="94" y="0.0" width="28" height="28"/>
@@ -69,6 +75,9 @@
                                                 <constraint firstAttribute="width" secondItem="OIz-In-zMA" secondAttribute="height" multiplier="1:1" id="sGy-xk-fxx"/>
                                             </constraints>
                                             <state key="normal" image="next"/>
+                                            <connections>
+                                                <action selector="nextBtnTouched:" destination="-1" eventType="touchUpInside" id="iLN-Os-qqv"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                 </stackView>
@@ -119,6 +128,9 @@
                         <constraint firstAttribute="width" secondItem="lZC-21-ROv" secondAttribute="height" multiplier="1:1" id="aOL-r1-geI"/>
                         <constraint firstAttribute="width" constant="43" id="few-TU-dPn"/>
                     </constraints>
+                    <connections>
+                        <action selector="playerBtnTouched:" destination="-1" eventType="touchUpInside" id="jL2-Hl-3Wp"/>
+                    </connections>
                 </button>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -178,6 +190,9 @@
                                                 <constraint firstAttribute="width" secondItem="MyT-4o-bO0" secondAttribute="height" multiplier="1:1" id="Kde-4s-Umb"/>
                                             </constraints>
                                             <state key="normal" image="prev"/>
+                                            <connections>
+                                                <action selector="prevBtnTouched:" destination="-1" eventType="touchUpInside" id="GGt-pi-K8C"/>
+                                            </connections>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PJr-ZS-TIN">
                                             <rect key="frame" x="47" y="0.0" width="28" height="28"/>
@@ -186,6 +201,9 @@
                                                 <constraint firstAttribute="width" constant="28" id="iBm-rg-Tot"/>
                                             </constraints>
                                             <state key="normal" image="pause"/>
+                                            <connections>
+                                                <action selector="playPauseBtnTouched:" destination="-1" eventType="touchUpInside" id="IAL-2d-Op0"/>
+                                            </connections>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yxK-Pn-E3j">
                                             <rect key="frame" x="94" y="0.0" width="28" height="28"/>
@@ -194,6 +212,9 @@
                                                 <constraint firstAttribute="width" constant="28" id="ay6-Mv-09X"/>
                                             </constraints>
                                             <state key="normal" image="next"/>
+                                            <connections>
+                                                <action selector="nextBtnTouched:" destination="-1" eventType="touchUpInside" id="f2K-dS-2K2"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                 </stackView>
@@ -244,6 +265,9 @@
                         <constraint firstAttribute="width" secondItem="BrR-BF-gho" secondAttribute="height" multiplier="1:1" id="ISh-V0-JOH"/>
                         <constraint firstAttribute="width" constant="43" id="Sfh-qS-XpB"/>
                     </constraints>
+                    <connections>
+                        <action selector="playerBtnTouched:" destination="-1" eventType="touchUpInside" id="FUS-sN-sVt"/>
+                    </connections>
                 </button>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

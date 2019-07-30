@@ -24,7 +24,7 @@ enum PlayerViewTags: Int{
 public protocol PlayerEventDelegate: AnyObject {
     func playerTouched()
     func playerControlBtnTouched(event: PlayerControlEvent)
-    func playerCloseBtnTouched()
+//    func playerCloseBtnTouched()
 }
 
 let playerButtonWidthHeight: CGFloat = 43

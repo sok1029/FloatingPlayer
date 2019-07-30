@@ -48,8 +48,6 @@ public class FloatingPlayer {
     private var fltType: FloatingType = .left
     private var fltLocYInScreen: CGFloat = 0
 
-    var delegate: PlayerEventDelegate?
-
     public init(imgName: String? = nil) {
         self.appWindow = UIApplication.shared.keyWindow
         //Button
@@ -195,7 +193,7 @@ public class FloatingPlayer {
                     //        miniPlayerView?.nextMoveButton.isEnabled = WelaaaPlayerMangager.shared.isNextItem()
                     
                     //        miniPlayerView?.delegate = self
-                    playerView.delegate = delegate
+                    playerView.delegate = fltPlayerViewController
 
                     return playerView
                 }()

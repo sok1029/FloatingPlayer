@@ -17,7 +17,6 @@ class ViewController: UIViewController {
     }
     
     @IBAction func showBtnTouched(_ sender: Any) {
-        floatingPlayer.delegate = self
         floatingPlayer.floatingWindowShow()
     }
     
@@ -25,20 +24,3 @@ class ViewController: UIViewController {
         floatingPlayer.floatingWindowHide()
     }
 }
-
-extension ViewController: PlayerEventDelegate{
-    func playerTouched() {
-        print("playerTouched")
-    }
-    
-    func playerControlBtnTouched(event: PlayerControlEvent) {
-        print("playerControlBtnTouched")
-        
-    }
-    
-    func playerCloseBtnTouched() {
-        print("playerCloseBtnTouched")
-    }
-    
-}
-

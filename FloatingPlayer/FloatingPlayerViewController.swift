@@ -14,6 +14,7 @@ enum DeviceOrientationChange{
 }
 
 class FloatingPlayerViewController: UIViewController {
+    
     var deviceOriChangedSubject = PublishSubject<DeviceOrientationChange>()
     
     override func viewDidLoad() {
@@ -32,3 +33,13 @@ class FloatingPlayerViewController: UIViewController {
     }
 }
 
+extension FloatingPlayerViewController: PlayerEventDelegate{
+    func playerTouched() {
+            print("playerTouched")
+    }
+
+    func playerControlBtnTouched(event: PlayerControlEvent) {
+        print("playerControlBtnTouched")
+    }
+
+}
