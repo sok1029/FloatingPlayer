@@ -100,10 +100,6 @@ class PlayerView: UIView{
         delegate?.playerControlBtnTouched(event: .toggle)
     }
     
-    @IBAction func closeBtnTouched(_ sender: Any) {
-        delegate?.playerCloseBtnTouched()
-    }
-    
     @IBAction func playerBtnTouched(_ sender: Any) {
         delegate?.playerTouched()
     }

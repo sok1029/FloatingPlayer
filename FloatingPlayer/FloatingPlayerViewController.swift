@@ -9,9 +9,12 @@
 import UIKit
 import RxSwift
 
+enum DeviceOrientationChange{
+    case will, did
+}
+
 class FloatingPlayerViewController: UIViewController {
-    var floatingPlayer: FloatingPlayer!
-    var currentOrientationSubject = PublishSubject<UIDeviceOrientation>()
+    var deviceOriChangedSubject = PublishSubject<DeviceOrientationChange>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,10 +22,12 @@ class FloatingPlayerViewController: UIViewController {
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        self.floatingPlayer.fltWindow.alpha = 0
+       
+        deviceOriChangedSubject.onNext(DeviceOrientationChange.will)
+       
         coordinator.animateAlongsideTransition(in: nil, animation: { (a) in
         }) { [weak self] (b) in
-            self?.currentOrientationSubject.onNext(UIDevice.current.orientation)
+            self?.deviceOriChangedSubject.onNext(DeviceOrientationChange.did)
         }
     }
 }

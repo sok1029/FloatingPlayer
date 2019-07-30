@@ -32,8 +32,7 @@ class FloatingWindow : UIWindow {
 public class FloatingPlayer {
     let disposeBag = DisposeBag()
 
-    var fltWindow: FloatingWindow!
-
+    private var fltWindow: FloatingWindow!
     private var appWindow: UIWindow!
     private var fltButton: UIButton!
 
@@ -80,10 +79,16 @@ public class FloatingPlayer {
         makeFloatingView(with: fltButton)
         
         //floatinPlayerViewController
-        fltPlayerViewController?.currentOrientationSubject.subscribe(onNext: { [weak self] (orientation) in
+        fltPlayerViewController?.deviceOriChangedSubject.subscribe(onNext: { [weak self] (change) in
             guard let sSelf = self else{ return}
-            sSelf.fltWindow.center  = sSelf.getSettledFloatingWindowCenterPoint()
-            sSelf.fltWindow.alpha = 1
+            
+            switch change{
+                case .will:
+                    sSelf.fltWindow.alpha = 0
+                case .did:
+                    sSelf.fltWindow.alpha = 1
+                    sSelf.fltWindow.center  = sSelf.getSettledFloatingWindowCenterPoint()
+            }
             
         }).disposed(by: disposeBag)
     }
@@ -92,7 +97,6 @@ public class FloatingPlayer {
         let window =  FloatingWindow(frame: CGRect.init(origin: CGPoint(x: 0, y: getScreenHeight() / 2), size: button.frame.size))
       
         fltPlayerViewController = FloatingPlayerViewController()
-        fltPlayerViewController!.floatingPlayer = self
         
         window.rootViewController = fltPlayerViewController
         window.topView = button
