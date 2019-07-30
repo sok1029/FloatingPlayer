@@ -56,7 +56,7 @@ public class FloatingPlayer {
         //Button
         self.fltButton = {
             let button = UIButton(type: UIButton.ButtonType.custom)
-            button.backgroundColor = .yellow
+            button.backgroundColor = .lightGray
             button.frame = CGRect(x: 0, y: 0, width: playerButtonWidthHeight, height: playerButtonWidthHeight)
             button.layer.cornerRadius = playerButtonWidthHeight / 2
             button.clipsToBounds = true
