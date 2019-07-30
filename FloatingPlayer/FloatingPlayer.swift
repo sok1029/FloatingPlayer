@@ -31,9 +31,10 @@ class FloatingWindow : UIWindow {
 
 public class FloatingPlayer {
     let disposeBag = DisposeBag()
-    
+
+    var fltWindow: FloatingWindow!
+
     private var appWindow: UIWindow!
-    private var fltWindow: FloatingWindow!
     private var fltButton: UIButton!
 
     private var isPlaying: Bool = false
@@ -81,25 +82,18 @@ public class FloatingPlayer {
         //floatinPlayerViewController
         fltPlayerViewController?.currentOrientationSubject.subscribe(onNext: { [weak self] (orientation) in
             guard let sSelf = self else{ return}
-            sSelf.fltWindow.alpha = 0
-            
-        }).disposed(by: disposeBag)
-        // when transitiong orientation window's center auto change by system.
-        // so setting new frame after transitioning by delay operator
-
-        fltPlayerViewController?.currentOrientationSubject.delay(0.35, scheduler:  MainScheduler.instance).subscribe(onNext: { [weak self] (orientation) in
-            guard let sSelf = self else{ return}
             sSelf.fltWindow.center  = sSelf.getSettledFloatingWindowCenterPoint()
-            UIView.animate(withDuration: 0.05, delay:0.0,animations: {
-                sSelf.fltWindow.alpha = 1
-            })
-
+            sSelf.fltWindow.alpha = 1
+            
         }).disposed(by: disposeBag)
     }
     
     private func makeFloatingView(with button: UIButton){
         let window =  FloatingWindow(frame: CGRect.init(origin: CGPoint(x: 0, y: getScreenHeight() / 2), size: button.frame.size))
+      
         fltPlayerViewController = FloatingPlayerViewController()
+        fltPlayerViewController!.floatingPlayer = self
+        
         window.rootViewController = fltPlayerViewController
         window.topView = button
         window.windowLevel = .normal

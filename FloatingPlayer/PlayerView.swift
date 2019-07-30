@@ -58,7 +58,6 @@ class PlayerView: UIView{
             startButton.layer.cornerRadius = buttonWidth / 2
         }
         self.layoutIfNeeded()
-        
     }
     
     func setStartButtonImage(image: UIImage){

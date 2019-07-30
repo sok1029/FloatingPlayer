@@ -10,15 +10,20 @@ import UIKit
 import RxSwift
 
 class FloatingPlayerViewController: UIViewController {
-    //    let disposeBag = DisposeBag()
+    var floatingPlayer: FloatingPlayer!
     var currentOrientationSubject = PublishSubject<UIDeviceOrientation>()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        currentOrientationSubject.onNext(UIDevice.current.orientation)
+        self.floatingPlayer.fltWindow.alpha = 0
+        coordinator.animateAlongsideTransition(in: nil, animation: { (a) in
+        }) { [weak self] (b) in
+            self?.currentOrientationSubject.onNext(UIDevice.current.orientation)
+        }
     }
 }
 
