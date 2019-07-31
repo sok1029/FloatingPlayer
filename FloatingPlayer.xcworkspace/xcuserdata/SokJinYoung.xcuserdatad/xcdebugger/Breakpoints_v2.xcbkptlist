@@ -10,7 +10,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FloatingPlayer/PlayerView.swift"
-            timestampString = "586171558.9069721"
+            timestampString = "586259860.683642"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "92"
@@ -26,7 +26,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FloatingPlayer/PlayerView.swift"
-            timestampString = "586171558.907355"
+            timestampString = "586259860.684287"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "96"
@@ -42,7 +42,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FloatingPlayer/PlayerView.swift"
-            timestampString = "586171558.907612"
+            timestampString = "586259860.6845551"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "100"
@@ -58,12 +58,44 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FloatingPlayer/PlayerView.swift"
-            timestampString = "586171558.9078521"
+            timestampString = "586259860.684817"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "104"
             endingLineNumber = "104"
             landmarkName = "playerBtnTouched(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FloatingPlayer/FloatingPlayer.swift"
+            timestampString = "586259860.685079"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "76"
+            endingLineNumber = "76"
+            landmarkName = "handlePanGesture(panGesture:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FloatingPlayer/FloatingPlayer.swift"
+            timestampString = "586259860.685565"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "143"
+            endingLineNumber = "143"
+            landmarkName = "init(imgName:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -40,12 +40,12 @@ class PlayerView: UIView{
         //        set()
     }
     
-    init(frame: CGRect, type: FloatingType){
+    init(frame: CGRect, type: FloatingSettledDirection){
         super.init(frame: frame)
         set(type)
     }
     
-    func set(_ type: FloatingType){
+    func set(_ type: FloatingSettledDirection){
         //xib connect
         guard let xibName = NSStringFromClass(self.classForCoder).components(separatedBy: ".").last else { return }
         
