@@ -15,7 +15,7 @@ enum FloatingSettledDirection{
 class FloatingWindow : UIWindow {
     let disposeBag = DisposeBag()
     let appWindow: UIWindow! = UIApplication.shared.keyWindow
-
+    
     lazy var topButton: UIButton = {
             let button = UIButton(type: UIButton.ButtonType.custom)
             button.backgroundColor = .lightGray
@@ -31,18 +31,11 @@ class FloatingWindow : UIWindow {
         }()
     
     var dragging: Bool = false
-
-    var locationYInAppWindow: CGFloat {
-        return self.center.y / UIScreen.main.bounds.height
-    }
-    var settledDirection: FloatingSettledDirection = .left
-    var settledCenterPoint: CGPoint  {
-        let halfWidthOfWindow = topButton.frame.size.width / 2.0
-        let centerX = (settledDirection == .left) ? halfWidthOfWindow : UIScreen.main.bounds.width - halfWidthOfWindow
-        let centerY = locationYInAppWindow * UIScreen.main.bounds.height
-        return CGPoint(x: centerX, y: centerY)
-    }
     
+    var winCenterLocYInScreen: CGFloat = (UIScreen.main.bounds.height / 2.0) / UIScreen.main.bounds.height
+    
+    var settledDirection: FloatingSettledDirection = .left
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -52,6 +45,7 @@ class FloatingWindow : UIWindow {
             return CGRect(origin: CGPoint(x: 0, y: UIScreen.main.bounds.height / 2.0), size: CGSize(width: playerButtonWidthHeight, height: playerButtonWidthHeight))
         }()
         super.init(frame: frame)
+        
         self.rootViewController = FloatingPlayerViewController()
         self.windowLevel = .normal
         self.backgroundColor = .clear
@@ -66,7 +60,15 @@ class FloatingWindow : UIWindow {
                         sSelf.alpha = 0
                     case .did:
                         sSelf.alpha = 1
-                        sSelf.center  = sSelf.settledCenterPoint
+                        sSelf.center  = {
+                            let halfWidthOfWin = sSelf.topButton.frame.size.width / 2.0
+                            let centerX = (sSelf.settledDirection == .left) ? halfWidthOfWin : UIScreen.main.bounds.width - halfWidthOfWin
+                            
+                            let newScreenHeight = UIScreen.main.bounds.height
+                            let centerY = sSelf.winCenterLocYInScreen * newScreenHeight
+                            
+                            return CGPoint(x: centerX, y: centerY)
+                        }()
                 }
             }).disposed(by: disposeBag)
         }
@@ -92,6 +94,8 @@ class FloatingWindow : UIWindow {
                     CGPoint(x: UIScreen.main.bounds.width - viewHalfWidth, y: point.y):
                     CGPoint(x: viewHalfWidth, y: point.y)
             })
+            
+            winCenterLocYInScreen = center.y / UIScreen.main.bounds.height
         }
         else if panGesture.state == .changed {
             let location = panGesture.location(in: topButton)
@@ -152,7 +156,6 @@ public class FloatingPlayer {
     public func floatingWindowShow() {
         if fltWindow.isHidden {
             fltWindow.makeKeyAndVisible()
-    //        fltWindow.addSubview(fltButton)
             fltWindow.isHidden = false
         }
     }
