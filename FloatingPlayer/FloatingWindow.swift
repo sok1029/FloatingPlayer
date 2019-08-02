@@ -18,17 +18,17 @@ class FloatingWindow : UIWindow {
     let disposeBag = DisposeBag()
     
     lazy var topButton: UIButton = {
-        let button = UIButton(type: UIButton.ButtonType.custom)
-        button.backgroundColor = .lightGray
-        button.frame = CGRect(x: 0, y: 0, width: playerButtonWidthHeight, height: playerButtonWidthHeight)
-        button.layer.cornerRadius = playerButtonWidthHeight / 2
-        button.clipsToBounds = true
+        let b = UIButton(type: UIButton.ButtonType.custom)
+        b.backgroundColor = .lightGray
+        b.frame = CGRect(x: 0, y: 0, width: fltBtnWidthHeight, height: fltBtnWidthHeight)
+        b.layer.cornerRadius = fltBtnWidthHeight / 2
+        b.clipsToBounds = true
         
-        let panGesture = UIPanGestureRecognizer(target: self, action:#selector(handlePanGesture(panGesture:)))
+        let panGesture = UIPanGestureRecognizer(target: self, action:#selector(handleFloating(panGesture:)))
         panGesture.cancelsTouchesInView = false
-        button.addGestureRecognizer(panGesture)
+        b.addGestureRecognizer(panGesture)
         
-        return button
+        return b
     }()
     
     var dragging: Bool = false
@@ -43,7 +43,8 @@ class FloatingWindow : UIWindow {
     
     init() {
         let frame = {
-            return CGRect(origin: CGPoint(x: 0, y: UIScreen.main.bounds.height / 2.0), size: CGSize(width: playerButtonWidthHeight, height: playerButtonWidthHeight))
+            return CGRect(origin: CGPoint(x: 0, y: UIScreen.main.bounds.height / 2.0),
+                          size: CGSize(width: fltBtnWidthHeight, height: fltBtnWidthHeight))
         }()
         super.init(frame: frame)
         
@@ -52,71 +53,78 @@ class FloatingWindow : UIWindow {
         self.rootViewController = FloatingPlayerViewController()
 
         if let fltPlayerVC = self.rootViewController as? FloatingPlayerViewController{
-            fltPlayerVC.deviceOriChangedSubject.subscribe(onNext: { [weak self] (change) in
-                guard let sSelf = self else{ return}
-                switch change{
-                case .will:
-                    sSelf.alpha = 0
-                case .did:
-                    sSelf.alpha = 1
-                    sSelf.center  = {
-                        let halfWidthOfWin = sSelf.topButton.frame.size.width / 2.0
-                        let centerX = (sSelf.settledDirection == .left) ? halfWidthOfWin : UIScreen.main.bounds.width - halfWidthOfWin
+            fltPlayerVC.deviceOriTransitionSubject.subscribe(onNext: { [weak self] (transition) in
+                guard let sSelf = self else{ return }
+               
+                switch transition{
+                    case .will:
+                        sSelf.alpha = 0
+                    case .did:
+                        sSelf.alpha = 1
+                        sSelf.center  = {
+                            let halfWidthOfWin = sSelf.topButton.frame.size.width / 2.0
+                            let centerX = (sSelf.settledDirection == .left) ? halfWidthOfWin : UIScreen.main.bounds.width - halfWidthOfWin
                         
-                        let newScreenHeight = UIScreen.main.bounds.height
-                        let centerY = sSelf.winCenterLocYInScreen * newScreenHeight
+                            let newScreenHeight = UIScreen.main.bounds.height
+                            let centerY = sSelf.winCenterLocYInScreen * newScreenHeight
                         
-                        return CGPoint(x: centerX, y: centerY)
-                    }()
+                            return CGPoint(x: centerX, y: centerY)
+                        }()
                 }
             }).disposed(by: disposeBag)
         }
     }
     
-    @objc func handlePanGesture(panGesture: UIPanGestureRecognizer) {
-        func getCenterPoint() -> CGPoint {
-            let location = panGesture.location(in: topButton)
-            let appWindow = (UIApplication.shared.delegate as! AppDelegate).window
-            var centerPoint: CGPoint = self.convert(location, to: appWindow)
+    @objc func handleFloating(panGesture: UIPanGestureRecognizer) {
+        guard let appWindow = (UIApplication.shared.delegate as? AppDelegate)?.window else { return }
+        
+        func getFloatingWindowCenterPoint() -> CGPoint {
+            let fingerP: CGPoint = {
+                let location = panGesture.location(in: topButton)
+                return self.convert(location, to: appWindow)
+            }()
             //limit
-            let viewHalfHeight = topButton.frame.size.height / 2.0
-            let topInset = appWindow!.safeAreaInsets.top
-            let bottomInset = appWindow!.safeAreaInsets.bottom
             //        let tapbbarHeight: CGFloat = 49.0
-            let topLimitY = topInset + viewHalfHeight
-            let bottomLimitY = UIScreen.main.bounds.height - bottomInset - viewHalfHeight
-            
-            if centerPoint.y < topLimitY { centerPoint = CGPoint(x: centerPoint.x, y: topLimitY) }
-            else if centerPoint.y > bottomLimitY { centerPoint = CGPoint(x: centerPoint.x, y: bottomLimitY)}
-            
-            return centerPoint
+            let fltHalfHeight = topButton.frame.size.height / 2.0
+            let topLimitCenterY = appWindow.safeAreaInsets.top + fltHalfHeight
+            let bottomLimitCenterY = UIScreen.main.bounds.height - appWindow.safeAreaInsets.bottom - fltHalfHeight
+        
+            var windowCenterP = fingerP
+
+            if fingerP.y < topLimitCenterY { windowCenterP.y = topLimitCenterY  }
+            else if fingerP.y > bottomLimitCenterY { windowCenterP.y = bottomLimitCenterY }
+        
+            return windowCenterP
         }
         
         if panGesture.state == .began {
             dragging = true
         }
+        else if panGesture.state == .changed {
+            UIView.animate(withDuration: 0.1, delay: 0.0, options: [.beginFromCurrentState,.curveEaseInOut], animations: { [weak self] in
+                guard let sSelf = self else{ return }
+                sSelf.center = getFloatingWindowCenterPoint()
+            })
+        }
         else if panGesture.state == .ended {
-            let point = getCenterPoint()
-            let viewHalfWidth = topButton.frame.size.width / 2.0
-            
-            let isOverHalf = point.x <  UIScreen.main.bounds.width / 2.0 ? false : true
-            settledDirection = isOverHalf ? .right : .left
+            let windowCenterP = getFloatingWindowCenterPoint()
+            let fltHalfWidth = topButton.frame.size.width / 2.0
+            let wasButtonOverHalf = windowCenterP.x < (UIScreen.main.bounds.width / 2.0) ? false : true
             
             //left,right decision
-            UIView.animate(withDuration: 0.2, delay: 0.0, options: [.beginFromCurrentState,.curveEaseInOut], animations: { [weak self] in
-                guard let sSelf = self else {return}
-                sSelf.center = isOverHalf ?
-                    CGPoint(x: UIScreen.main.bounds.width - viewHalfWidth, y: point.y):
-                    CGPoint(x: viewHalfWidth, y: point.y)
-            })
+            UIView.animate(withDuration: 0.2, delay: 0.0, options: [.beginFromCurrentState,.curveEaseInOut], animations: {
+                [weak self] in
+                guard let sSelf = self else { return }
+                sSelf.center = wasButtonOverHalf ?
+                    CGPoint(x: UIScreen.main.bounds.width - fltHalfWidth, y: windowCenterP.y):
+                    CGPoint(x: fltHalfWidth, y: windowCenterP.y)
+            }) { [weak self] (c)  in
+                self?.dragging = false
+                self?.settledDirection = wasButtonOverHalf ? .right : .left
+            }
             
             winCenterLocYInScreen = center.y / UIScreen.main.bounds.height
         }
-        else if panGesture.state == .changed {
-            UIView.animate(withDuration: 0.1, delay: 0.0, options: [.beginFromCurrentState,.curveEaseInOut], animations: {[weak self] in
-                guard let sSelf = self else{return}
-                sSelf.center = getCenterPoint()
-            })
-        }
+      
     }
 }

@@ -13,23 +13,22 @@ public class FloatingPlayer {
     private var fltWindow: FloatingWindow!
     private var playerView: PlayerView?
     private var isPlaying: Bool = false
-    private var playerBgView: UIView?
+    private var dimBgView: UIView?
 
     init(imgName: String? = nil) {
         self.fltWindow = FloatingWindow()
         self.fltWindow.topButton.rx.controlEvent([.touchUpInside])
             .subscribe(onNext: { [weak self]  in
-                self?.playerBtnTouched()
+                self?.showPlayer()
             })
             .disposed(by: disposeBag)
 
-        if let imgName = imgName{
-            let image = UIImage(named: imgName)
+        if let imgName = imgName, let image = UIImage(named: imgName) {
             self.fltWindow.topButton.setImage(image, for: .normal)
         }
     }
     
-    public func floatingWindowShow() {
+    public func showFloatingWindow() {
         if fltWindow.isHidden {
             fltWindow.makeKeyAndVisible()
             fltWindow.addSubview(fltWindow.topButton)
@@ -37,49 +36,42 @@ public class FloatingPlayer {
         }
     }
     
-    public func floatingWindowHide() {
+    public func hideFloatingWindow() {
         fltWindow.isHidden = true
         fltWindow.topButton.removeFromSuperview()
     }
-
-    private func playerBtnTouched(){
-        if !fltWindow.dragging{
-            playerControllerShow()
-        }
-        fltWindow.dragging = false
-    }
     
-    private func playerControllerShow() {
-        if !fltWindow.isHidden{
-            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-           
-            if let window = appDelegate.window{
-                floatingWindowHide()
+    private func showPlayer() {
+        if !fltWindow.dragging, !fltWindow.isHidden{
+            if let appWindow = (UIApplication.shared.delegate as! AppDelegate).window{
+                hideFloatingWindow()
                 
-                //background diableView
-                let bgView = UIView(frame: window.bounds)
-                window.addSubview(bgView);
-                bgView.backgroundColor = UIColor.clear
-                let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(foldPlayerView(_:)))
-                bgView.addGestureRecognizer(gestureRecognizer)
-                playerBgView = bgView
+                //background dimView(=diableView)
+                let dimBgView: UIView = {
+                    let v = UIView(frame: appWindow.bounds)
+                    v.backgroundColor = UIColor.clear
+                    let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(removePlayer(_:)))
+                    v.addGestureRecognizer(gestureRecognizer)
+                    return v
+                }()
                 
+                self.dimBgView = dimBgView
+
                 UIView.animate(withDuration: 0.15, delay: 0.0, options: [.beginFromCurrentState,.curveEaseInOut], animations: {
-                    bgView.backgroundColor = UIColor.init(white: 0.0, alpha: 0.65)
+                    dimBgView.backgroundColor = UIColor.init(white: 0.0, alpha: 0.65)
                 })
                 
                 //playerView
                  playerView = {
                         let frame: CGRect =  {
-                            let point = (fltWindow.convert(fltWindow.topButton.frame.origin, to: window))
-
-                            return CGRect(x: 0, y: point.y, width:  UIScreen.main.bounds.width, height: playerButtonWidthHeight)
+                            let point = (fltWindow.convert(fltWindow.topButton.frame.origin, to: appWindow))
+                            return CGRect(x: 0, y: point.y, width:  UIScreen.main.bounds.width, height: fltBtnWidthHeight)
                         }()
                         
                         let playerView = PlayerView(frame: frame,type: fltWindow.settledDirection)
                         //image
                         if let image = fltWindow.topButton.image(for: .normal){
-                            playerView.setStartButtonImage(image: image)
+                            playerView.setOpenButtonImage(image)
                         }
                         playerView.setPlayButtonImage(isPlaying: isPlaying)
                         
@@ -93,20 +85,18 @@ public class FloatingPlayer {
                 }()
                 
                 self.playerView!.moveAnimation()
-                bgView.addSubview(playerView!)
+                
+                appWindow.addSubview(dimBgView);
+                dimBgView.addSubview(playerView!)
             }
         }
     }
     
-   
-    
-    @objc func foldPlayerView(_ sender: UITapGestureRecognizer){
-        floatingWindowShow()
-        removePlayerView()
-    }
-    func removePlayerView(){
-        playerBgView?.removeFromSuperview()
+    @objc func removePlayer(_ sender: UITapGestureRecognizer){
+        showFloatingWindow()
+        dimBgView?.removeFromSuperview()
         self.playerView = nil
+        
     }
 }
 

@@ -9,13 +9,13 @@
 import UIKit
 import RxSwift
 
-enum DeviceOrientationChange{
+enum DeviceOrientationTransition{
     case will, did
 }
 
 class FloatingPlayerViewController: UIViewController {
     
-    var deviceOriChangedSubject = PublishSubject<DeviceOrientationChange>()
+    var deviceOriTransitionSubject = PublishSubject<DeviceOrientationTransition>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,11 +24,11 @@ class FloatingPlayerViewController: UIViewController {
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
        
-        deviceOriChangedSubject.onNext(DeviceOrientationChange.will)
+        deviceOriTransitionSubject.onNext(DeviceOrientationTransition.will)
        
         coordinator.animateAlongsideTransition(in: nil, animation: { (a) in
         }) { [weak self] (b) in
-            self?.deviceOriChangedSubject.onNext(DeviceOrientationChange.did)
+            self?.deviceOriTransitionSubject.onNext(DeviceOrientationTransition.did)
         }
     }
 }

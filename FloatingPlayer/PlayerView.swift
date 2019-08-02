@@ -18,7 +18,7 @@ public enum PlayerControlEvent{
 }
 
 enum PlayerViewTags: Int{
-    case container = 100, startButton ,prevButton, pausePlayButton, nextButton
+    case container = 100, openButton ,prevButton, pausePlayButton, nextButton
 }
 
 public protocol PlayerEventDelegate: AnyObject {
@@ -27,13 +27,12 @@ public protocol PlayerEventDelegate: AnyObject {
 //    func playerCloseBtnTouched()
 }
 
-let playerButtonWidthHeight: CGFloat = 43
+let fltBtnWidthHeight: CGFloat = 43
 
 class PlayerView: UIView{
     weak var delegate: PlayerEventDelegate?
     
     @IBOutlet weak var controlViewLeadingConstraint: NSLayoutConstraint!
-    let buttonWidth: CGFloat = playerButtonWidthHeight
     //MARK: Init
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -54,15 +53,15 @@ class PlayerView: UIView{
         view.frame = self.bounds
         view.tag = PlayerViewTags.container.rawValue
         self.addSubview(view)
-        if let startButton  = self.viewWithTag(PlayerViewTags.startButton.rawValue){
-            startButton.layer.cornerRadius = buttonWidth / 2
+        if let startButton  = self.viewWithTag(PlayerViewTags.openButton.rawValue){
+            startButton.layer.cornerRadius = fltBtnWidthHeight / 2
         }
         self.layoutIfNeeded()
     }
     
-    func setStartButtonImage(image: UIImage){
-        if let startButton  = self.viewWithTag(PlayerViewTags.startButton.rawValue) as? UIButton{
-            startButton.setImage(image, for: .normal)
+    func setOpenButtonImage(_ image: UIImage){
+        if let openbutton  = self.viewWithTag(PlayerViewTags.openButton.rawValue) as? UIButton{
+            openbutton.setImage(image, for: .normal)
         }
     }
     
