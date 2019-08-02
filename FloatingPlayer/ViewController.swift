@@ -10,7 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    lazy var floatingPlayer = FloatingPlayer.init(imgName:"buttonImage.jpg")
+    var floatingPlayer = FloatingPlayer.init(imgName:"buttonImage.jpg")
     
     override func viewDidLoad() {
         super.viewDidLoad()

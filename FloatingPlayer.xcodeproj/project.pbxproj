@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		07B02F8A3D88D98D5193C3B0 /* Pods_FloatingPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD79B8D59B8732C087D3C91A /* Pods_FloatingPlayer.framework */; };
 		2EDFFDE00B203C0125672D37 /* Pods_FloatingPlayerUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 548565D827CED81EDDCBDE81 /* Pods_FloatingPlayerUITests.framework */; };
+		3E1B508222F2D9B0003AF2D3 /* FloatingWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1B508122F2D9B0003AF2D3 /* FloatingWindow.swift */; };
 		3E4441EA22F02B9A00CB59E8 /* DesignableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4441E922F02B9A00CB59E8 /* DesignableView.swift */; };
 		3EC77B5722ED4C1E004C2033 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC77B5622ED4C1E004C2033 /* PlayerView.swift */; };
 		3EC77B5B22ED4CE6004C2033 /* PlayerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3EC77B5A22ED4CE6004C2033 /* PlayerView.xib */; };
@@ -44,6 +45,7 @@
 /* Begin PBXFileReference section */
 		017C18A7B91B96606F21D574 /* Pods_FloatingPlayerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FloatingPlayerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		123E4B7D0FE7618E3EF83D94 /* Pods-FloatingPlayerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FloatingPlayerTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-FloatingPlayerTests/Pods-FloatingPlayerTests.release.xcconfig"; sourceTree = "<group>"; };
+		3E1B508122F2D9B0003AF2D3 /* FloatingWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingWindow.swift; sourceTree = "<group>"; };
 		3E4441E922F02B9A00CB59E8 /* DesignableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DesignableView.swift; sourceTree = "<group>"; };
 		3EC77B5622ED4C1E004C2033 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PlayerView.swift; path = /Users/SokJinYoung/Desktop/FloatingPlayer/FloatingPlayer/PlayerView.swift; sourceTree = "<absolute>"; };
 		3EC77B5A22ED4CE6004C2033 /* PlayerView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlayerView.xib; sourceTree = "<group>"; };
@@ -99,13 +101,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		3E4441EB22F02E6500CB59E8 /* New Group */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "New Group";
-			sourceTree = "<group>";
-		};
 		3ED6AAA222ED499C00C650B0 = {
 			isa = PBXGroup;
 			children = (
@@ -131,12 +126,12 @@
 		3ED6AAAD22ED499C00C650B0 /* FloatingPlayer */ = {
 			isa = PBXGroup;
 			children = (
-				3E4441EB22F02E6500CB59E8 /* New Group */,
 				3E4441E922F02B9A00CB59E8 /* DesignableView.swift */,
 				3ED6AAAE22ED499C00C650B0 /* AppDelegate.swift */,
 				3ED6AAB022ED499C00C650B0 /* ViewController.swift */,
 				3ED6AAB222ED499C00C650B0 /* Main.storyboard */,
 				3ED6AADC22ED4A5500C650B0 /* FloatingPlayer.swift */,
+				3E1B508122F2D9B0003AF2D3 /* FloatingWindow.swift */,
 				3EC77B5C22ED4D0C004C2033 /* FloatingPlayerViewController.swift */,
 				3EC77B5622ED4C1E004C2033 /* PlayerView.swift */,
 				3EC77B5A22ED4CE6004C2033 /* PlayerView.xib */,
@@ -485,6 +480,7 @@
 			files = (
 				3ED6AAB122ED499C00C650B0 /* ViewController.swift in Sources */,
 				3EC77B5D22ED4D0C004C2033 /* FloatingPlayerViewController.swift in Sources */,
+				3E1B508222F2D9B0003AF2D3 /* FloatingWindow.swift in Sources */,
 				3E4441EA22F02B9A00CB59E8 /* DesignableView.swift in Sources */,
 				3ED6AAAF22ED499C00C650B0 /* AppDelegate.swift in Sources */,
 				3ED6AADD22ED4A5500C650B0 /* FloatingPlayer.swift in Sources */,
