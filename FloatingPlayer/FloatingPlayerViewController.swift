@@ -14,7 +14,6 @@ enum DeviceOrientationTransition{
 }
 
 class FloatingPlayerViewController: UIViewController {
-    
     var deviceOriTransitionSubject = PublishSubject<DeviceOrientationTransition>()
     
     override func viewDidLoad() {
@@ -25,7 +24,6 @@ class FloatingPlayerViewController: UIViewController {
         super.viewWillTransition(to: size, with: coordinator)
        
         deviceOriTransitionSubject.onNext(DeviceOrientationTransition.will)
-       
         coordinator.animateAlongsideTransition(in: nil, animation: { (a) in
         }) { [weak self] (b) in
             self?.deviceOriTransitionSubject.onNext(DeviceOrientationTransition.did)
@@ -34,11 +32,11 @@ class FloatingPlayerViewController: UIViewController {
 }
 
 extension FloatingPlayerViewController: PlayerEventDelegate{
-    func playerTouched() {
-            print("playerTouched")
+    func playerOpenBtnTouched() {
+            print("playerOpenBtnTouched")
     }
 
-    func playerControlBtnTouched(event: PlayerControlEvent) {
+    func playerControlBtnTouched(event: PlayerControl) {
         print("playerControlBtnTouched")
     }
 

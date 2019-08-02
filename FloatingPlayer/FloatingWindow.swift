@@ -14,6 +14,8 @@ enum FloatingSettledDirection{
     case left, right
 }
 
+let fltBtnWidthHeight: CGFloat = 43
+
 class FloatingWindow : UIWindow {
     let disposeBag = DisposeBag()
     
@@ -33,7 +35,7 @@ class FloatingWindow : UIWindow {
     
     var dragging: Bool = false
     
-    var winCenterLocYInScreen: CGFloat = (UIScreen.main.bounds.height / 2.0) / UIScreen.main.bounds.height
+    private var winCenterLocYInScreen: CGFloat = (UIScreen.main.bounds.height / 2.0) / UIScreen.main.bounds.height
     
     var settledDirection: FloatingSettledDirection = .left
     
@@ -41,6 +43,7 @@ class FloatingWindow : UIWindow {
         super.init(coder: aDecoder)
     }
     
+    //MARK - Init
     init() {
         let frame = {
             return CGRect(origin: CGPoint(x: 0, y: UIScreen.main.bounds.height / 2.0),
@@ -74,7 +77,7 @@ class FloatingWindow : UIWindow {
             }).disposed(by: disposeBag)
         }
     }
-    
+    //MARK: -HandleFloating
     @objc func handleFloating(panGesture: UIPanGestureRecognizer) {
         guard let appWindow = (UIApplication.shared.delegate as? AppDelegate)?.window else { return }
         

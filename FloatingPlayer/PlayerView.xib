@@ -129,7 +129,7 @@
                         <constraint firstAttribute="width" constant="43" id="few-TU-dPn"/>
                     </constraints>
                     <connections>
-                        <action selector="playerBtnTouched:" destination="-1" eventType="touchUpInside" id="jL2-Hl-3Wp"/>
+                        <action selector="playerOpenBtnTouched:" destination="-1" eventType="touchUpInside" id="nQt-XT-d6O"/>
                     </connections>
                 </button>
             </subviews>
@@ -266,7 +266,7 @@
                         <constraint firstAttribute="width" constant="43" id="Sfh-qS-XpB"/>
                     </constraints>
                     <connections>
-                        <action selector="playerBtnTouched:" destination="-1" eventType="touchUpInside" id="FUS-sN-sVt"/>
+                        <action selector="playerOpenBtnTouched:" destination="-1" eventType="touchUpInside" id="HxX-CY-5GI"/>
                     </connections>
                 </button>
             </subviews>

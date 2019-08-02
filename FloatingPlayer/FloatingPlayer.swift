@@ -14,7 +14,8 @@ public class FloatingPlayer {
     private var playerView: PlayerView?
     private var isPlaying: Bool = false
     private var dimBgView: UIView?
-
+    
+    //MARK: -Init
     init(imgName: String? = nil) {
         self.fltWindow = FloatingWindow()
         self.fltWindow.topButton.rx.controlEvent([.touchUpInside])
@@ -28,6 +29,7 @@ public class FloatingPlayer {
         }
     }
     
+    //MARK: -FloatingWindow
     public func showFloatingWindow() {
         if fltWindow.isHidden {
             fltWindow.makeKeyAndVisible()
@@ -41,11 +43,12 @@ public class FloatingPlayer {
         fltWindow.topButton.removeFromSuperview()
     }
     
+    //MARK: -Player
     private func showPlayer() {
         if !fltWindow.dragging, !fltWindow.isHidden{
             if let appWindow = (UIApplication.shared.delegate as! AppDelegate).window{
                 hideFloatingWindow()
-                
+               
                 //background dimView(=diableView)
                 let dimBgView: UIView = {
                     let v = UIView(frame: appWindow.bounds)
@@ -61,27 +64,28 @@ public class FloatingPlayer {
                     dimBgView.backgroundColor = UIColor.init(white: 0.0, alpha: 0.65)
                 })
                 
-                //playerView
+                //PlayerView
                  playerView = {
+                    let playerView: PlayerView = {
                         let frame: CGRect =  {
-                            let point = (fltWindow.convert(fltWindow.topButton.frame.origin, to: appWindow))
-                            return CGRect(x: 0, y: point.y, width:  UIScreen.main.bounds.width, height: fltBtnWidthHeight)
+                            let p = (fltWindow.convert(fltWindow.topButton.frame.origin, to: appWindow))
+                            return CGRect(x: 0, y: p.y, width:  UIScreen.main.bounds.width, height: fltBtnWidthHeight)
                         }()
-                        
-                        let playerView = PlayerView(frame: frame,type: fltWindow.settledDirection)
-                        //image
-                        if let image = fltWindow.topButton.image(for: .normal){
-                            playerView.setOpenButtonImage(image)
-                        }
-                        playerView.setPlayButtonImage(isPlaying: isPlaying)
-                        
-                        //        miniPlayerView?.prevMoveButton.isEnabled = WelaaaPlayerMangager.shared.isPrevItem()
-                        //        miniPlayerView?.nextMoveButton.isEnabled = WelaaaPlayerMangager.shared.isNextItem()
-                        
-                        //        miniPlayerView?.delegate = self
-                        playerView.delegate = fltWindow.rootViewController as! FloatingPlayerViewController
-                        
-                        return playerView
+                        return PlayerView(frame: frame,type: fltWindow.settledDirection)
+                    }()
+                    //image
+                    if let image = fltWindow.topButton.image(for: .normal){
+                        playerView.setOpenButtonImage(image)
+                    }
+                    playerView.setPlayButtonImage(isPlaying: isPlaying)
+                    
+                    //        miniPlayerView?.prevMoveButton.isEnabled = WelaaaPlayerMangager.shared.isPrevItem()
+                    //        miniPlayerView?.nextMoveButton.isEnabled = WelaaaPlayerMangager.shared.isNextItem()
+                    
+                    //        miniPlayerView?.delegate = self
+                    playerView.delegate = fltWindow.rootViewController as! FloatingPlayerViewController
+                    
+                    return playerView
                 }()
                 
                 self.playerView!.moveAnimation()
@@ -95,8 +99,7 @@ public class FloatingPlayer {
     @objc func removePlayer(_ sender: UITapGestureRecognizer){
         showFloatingWindow()
         dimBgView?.removeFromSuperview()
-        self.playerView = nil
-        
+        playerView = nil
     }
 }
 

@@ -9,58 +9,58 @@
 //import Foundation
 import UIKit
 
-//import SDWebImage
-
-public enum PlayerControlEvent{
+public enum PlayerControl{
     case prev
     case next
     case toggle //play, pause
 }
 
-enum PlayerViewTags: Int{
+enum PlayerSubViews: Int{
     case container = 100, openButton ,prevButton, pausePlayButton, nextButton
 }
 
 public protocol PlayerEventDelegate: AnyObject {
-    func playerTouched()
-    func playerControlBtnTouched(event: PlayerControlEvent)
+    func playerOpenBtnTouched()
+    func playerControlBtnTouched(event: PlayerControl)
 //    func playerCloseBtnTouched()
 }
-
-let fltBtnWidthHeight: CGFloat = 43
 
 class PlayerView: UIView{
     weak var delegate: PlayerEventDelegate?
     
-    @IBOutlet weak var controlViewLeadingConstraint: NSLayoutConstraint!
-    //MARK: Init
+    //MARK: -Init
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        //        set()
     }
     
     init(frame: CGRect, type: FloatingSettledDirection){
         super.init(frame: frame)
-        set(type)
+        set(with: type)
     }
-    
-    func set(_ type: FloatingSettledDirection){
+    //MARK: -Set
+    private func set(with type: FloatingSettledDirection){
         //xib connect
         guard let xibName = NSStringFromClass(self.classForCoder).components(separatedBy: ".").last else { return }
         
-        let view = (type == .left) ? (Bundle.main.loadNibNamed(xibName, owner: self, options: nil)?.first as! UIView) : (Bundle.main.loadNibNamed(xibName, owner: self, options: nil)?.last as! UIView)
+        let view: UIView = {
+            let v = (type == .left) ?
+            (Bundle.main.loadNibNamed(xibName, owner: self, options: nil)?.first as! UIView) :
+            (Bundle.main.loadNibNamed(xibName, owner: self, options: nil)?.last as! UIView)
         
-        view.frame = self.bounds
-        view.tag = PlayerViewTags.container.rawValue
+            v.frame = self.bounds
+            v.tag = PlayerSubViews.container.rawValue
+            return v
+        }()
+        
         self.addSubview(view)
-        if let startButton  = self.viewWithTag(PlayerViewTags.openButton.rawValue){
-            startButton.layer.cornerRadius = fltBtnWidthHeight / 2
+        
+        if let openButton  = self.viewWithTag(PlayerSubViews.openButton.rawValue){
+            openButton.layer.cornerRadius = fltBtnWidthHeight / 2
         }
-        self.layoutIfNeeded()
     }
     
     func setOpenButtonImage(_ image: UIImage){
-        if let openbutton  = self.viewWithTag(PlayerViewTags.openButton.rawValue) as? UIButton{
+        if let openbutton = self.viewWithTag(PlayerSubViews.openButton.rawValue) as? UIButton{
             openbutton.setImage(image, for: .normal)
         }
     }
@@ -73,9 +73,9 @@ class PlayerView: UIView{
 //            playButton.setImage(UIImage.init(named: "miniPlay"), for: .normal)
 //        }
     }
-    
+    //MARK: -Animation
     func moveAnimation(){
-        if let constraints = self.viewWithTag(PlayerViewTags.container.rawValue)?.constraints{
+        if let constraints = self.viewWithTag(PlayerSubViews.container.rawValue)?.constraints{
             for c in constraints {
                 if c.identifier  == "horizontalSpcWithSafeArea"{
                     c.constant += 10
@@ -86,7 +86,7 @@ class PlayerView: UIView{
         }
     }
     
-    //MARK: Event
+    //MARK: -Event
     @IBAction func prevBtnTouched(_ sender: Any) {
         delegate?.playerControlBtnTouched(event: .prev)
     }
@@ -99,7 +99,7 @@ class PlayerView: UIView{
         delegate?.playerControlBtnTouched(event: .toggle)
     }
     
-    @IBAction func playerBtnTouched(_ sender: Any) {
-        delegate?.playerTouched()
+    @IBAction func playerOpenBtnTouched(_ sender: Any) {
+        delegate?.playerOpenBtnTouched()
     }
 }
