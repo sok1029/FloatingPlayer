@@ -10,24 +10,34 @@ import RxCocoa
 public class FloatingPlayer {
     let disposeBag = DisposeBag()
 
+    static let shared: FloatingPlayer = {
+        return FloatingPlayer.init()
+    }()
+    
     private var fltWindow: FloatingWindow!
     private var playerView: PlayerView?
     private var isPlaying: Bool = false
     private var dimBgView: UIView?
     
+    lazy var buttonImage = BehaviorRelay<String>(value: "")
     //MARK: -Init
-    init(imgName: String? = nil) {
+    private init() {
         self.fltWindow = FloatingWindow()
         self.fltWindow.topButton.rx.controlEvent([.touchUpInside])
             .subscribe(onNext: { [weak self]  in
                 self?.showPlayer()
             })
             .disposed(by: disposeBag)
-
-        if let imgName = imgName, let image = UIImage(named: imgName) {
-            self.fltWindow.topButton.setImage(image, for: .normal)
-        }
+        
+        self.buttonImage.asObservable().subscribe(onNext: { [weak self] (imgName) in
+            if imgName != ""{
+                if let img = UIImage.init(named: imgName){
+                    self?.fltWindow.topButton.setImage(img, for: .normal)
+                }
+            }
+        }).disposed(by: disposeBag)
     }
+    
     
     //MARK: -FloatingWindow
     public func showFloatingWindow() {

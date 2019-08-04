@@ -8,19 +8,20 @@
 
 import UIKit
 
+
 class ViewController: UIViewController {
-    
-    var floatingPlayer = FloatingPlayer.init(imgName:"buttonImage.jpg")
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        FloatingPlayer.shared.buttonImage.accept("buttonImage")
     }
     
     @IBAction func showBtnTouched(_ sender: Any) {
-        floatingPlayer.showFloatingWindow()
+        FloatingPlayer.shared.showFloatingWindow()
     }
     
     @IBAction func hideBtnTouched(_ sender: Any) {
-        floatingPlayer.hideFloatingWindow()
+        FloatingPlayer.shared.hideFloatingWindow()
+        FloatingPlayer.shared.buttonImage.accept("buttonImage2")
+
     }
 }
