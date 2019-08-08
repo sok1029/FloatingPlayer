@@ -30,14 +30,3 @@ class FloatingPlayerViewController: UIViewController {
         }
     }
 }
-
-extension FloatingPlayerViewController: PlayerEventDelegate{
-    func playerOpenBtnTouched() {
-            print("playerOpenBtnTouched")
-    }
-
-    func playerControlBtnTouched(event: PlayerControl) {
-        print("playerControlBtnTouched")
-    }
-
-}

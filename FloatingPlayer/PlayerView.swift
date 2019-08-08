@@ -19,15 +19,7 @@ enum PlayerSubViews: Int{
     case container = 100, openButton ,prevButton, pausePlayButton, nextButton
 }
 
-public protocol PlayerEventDelegate: AnyObject {
-    func playerOpenBtnTouched()
-    func playerControlBtnTouched(event: PlayerControl)
-//    func playerCloseBtnTouched()
-}
-
-class PlayerView: UIView{
-    weak var delegate: PlayerEventDelegate?
-    
+class PlayerView: UIView{    
     //MARK: -Init
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -86,20 +78,20 @@ class PlayerView: UIView{
         }
     }
     
-    //MARK: -Event
-    @IBAction func prevBtnTouched(_ sender: Any) {
-        delegate?.playerControlBtnTouched(event: .prev)
+    func getOpenButton() -> UIButton{
+        return self.viewWithTag(PlayerSubViews.openButton.rawValue) as! UIButton
     }
     
-    @IBAction func nextBtnTouched(_ sender: Any) {
-        delegate?.playerControlBtnTouched(event: .next)
+    func getPrevButton() -> UIButton{
+        return self.viewWithTag(PlayerSubViews.prevButton.rawValue) as! UIButton
     }
     
-    @IBAction func playPauseBtnTouched(_ sender: Any) {
-        delegate?.playerControlBtnTouched(event: .toggle)
+    func getPausePlayButton() -> UIButton{
+        return self.viewWithTag(PlayerSubViews.pausePlayButton.rawValue) as! UIButton
     }
     
-    @IBAction func playerOpenBtnTouched(_ sender: Any) {
-        delegate?.playerOpenBtnTouched()
+    func getNextButton() -> UIButton{
+        return self.viewWithTag(PlayerSubViews.nextButton.rawValue) as! UIButton
     }
+    
 }

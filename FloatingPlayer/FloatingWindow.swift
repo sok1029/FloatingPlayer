@@ -18,6 +18,10 @@ let fltBtnWidthHeight: CGFloat = 43
 
 class FloatingWindow : UIWindow {
     let disposeBag = DisposeBag()
+    var settledDirection: FloatingSettledDirection = .left
+    var dragging: Bool = false
+    private var winCenterLocYInScreen: CGFloat =
+        (UIScreen.main.bounds.height / 2.0) / (UIScreen.main.bounds.height)
     
     lazy var topButton: UIButton = {
         let b = UIButton(type: UIButton.ButtonType.custom)
@@ -32,12 +36,6 @@ class FloatingWindow : UIWindow {
         
         return b
     }()
-    
-    var dragging: Bool = false
-    
-    private var winCenterLocYInScreen: CGFloat = (UIScreen.main.bounds.height / 2.0) / UIScreen.main.bounds.height
-    
-    var settledDirection: FloatingSettledDirection = .left
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -77,6 +75,7 @@ class FloatingWindow : UIWindow {
             }).disposed(by: disposeBag)
         }
     }
+    
     //MARK: -HandleFloating
     @objc func handleFloating(panGesture: UIPanGestureRecognizer) {
         guard let appWindow = (UIApplication.shared.delegate as? AppDelegate)?.window else { return }

@@ -46,38 +46,29 @@
                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="m3m-NY-6Bp">
                                     <rect key="frame" x="0.0" y="8.5" width="122" height="28"/>
                                     <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="slt-G0-0IP">
+                                        <button opaque="NO" tag="102" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="slt-G0-0IP">
                                             <rect key="frame" x="0.0" y="0.0" width="28" height="28"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="slt-G0-0IP" secondAttribute="height" multiplier="1:1" id="Hmj-bv-IBX"/>
                                                 <constraint firstAttribute="width" constant="28" id="P2R-O6-EEl"/>
                                             </constraints>
                                             <state key="normal" image="prev"/>
-                                            <connections>
-                                                <action selector="prevBtnTouched:" destination="-1" eventType="touchUpInside" id="j4m-Fj-2rc"/>
-                                            </connections>
                                         </button>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A6y-Tq-XR9">
+                                        <button opaque="NO" tag="103" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A6y-Tq-XR9">
                                             <rect key="frame" x="47" y="0.0" width="28" height="28"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="A6y-Tq-XR9" secondAttribute="height" multiplier="1:1" id="Wp2-aS-Chx"/>
                                                 <constraint firstAttribute="width" constant="28" id="k25-ck-EN9"/>
                                             </constraints>
                                             <state key="normal" image="pause"/>
-                                            <connections>
-                                                <action selector="playPauseBtnTouched:" destination="-1" eventType="touchUpInside" id="34H-uj-wc1"/>
-                                            </connections>
                                         </button>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OIz-In-zMA">
+                                        <button opaque="NO" tag="104" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OIz-In-zMA">
                                             <rect key="frame" x="94" y="0.0" width="28" height="28"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="28" id="ejM-9h-GSz"/>
                                                 <constraint firstAttribute="width" secondItem="OIz-In-zMA" secondAttribute="height" multiplier="1:1" id="sGy-xk-fxx"/>
                                             </constraints>
                                             <state key="normal" image="next"/>
-                                            <connections>
-                                                <action selector="nextBtnTouched:" destination="-1" eventType="touchUpInside" id="iLN-Os-qqv"/>
-                                            </connections>
                                         </button>
                                     </subviews>
                                 </stackView>
@@ -128,9 +119,6 @@
                         <constraint firstAttribute="width" secondItem="lZC-21-ROv" secondAttribute="height" multiplier="1:1" id="aOL-r1-geI"/>
                         <constraint firstAttribute="width" constant="43" id="few-TU-dPn"/>
                     </constraints>
-                    <connections>
-                        <action selector="playerOpenBtnTouched:" destination="-1" eventType="touchUpInside" id="nQt-XT-d6O"/>
-                    </connections>
                 </button>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -183,38 +171,29 @@
                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="9u1-8p-NZN">
                                     <rect key="frame" x="0.0" y="8.5" width="122" height="28"/>
                                     <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MyT-4o-bO0">
+                                        <button opaque="NO" tag="102" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MyT-4o-bO0">
                                             <rect key="frame" x="0.0" y="0.0" width="28" height="28"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="28" id="5NB-Ko-Yf0"/>
                                                 <constraint firstAttribute="width" secondItem="MyT-4o-bO0" secondAttribute="height" multiplier="1:1" id="Kde-4s-Umb"/>
                                             </constraints>
                                             <state key="normal" image="prev"/>
-                                            <connections>
-                                                <action selector="prevBtnTouched:" destination="-1" eventType="touchUpInside" id="GGt-pi-K8C"/>
-                                            </connections>
                                         </button>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PJr-ZS-TIN">
+                                        <button opaque="NO" tag="103" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PJr-ZS-TIN">
                                             <rect key="frame" x="47" y="0.0" width="28" height="28"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="PJr-ZS-TIN" secondAttribute="height" multiplier="1:1" id="SEv-79-onb"/>
                                                 <constraint firstAttribute="width" constant="28" id="iBm-rg-Tot"/>
                                             </constraints>
                                             <state key="normal" image="pause"/>
-                                            <connections>
-                                                <action selector="playPauseBtnTouched:" destination="-1" eventType="touchUpInside" id="IAL-2d-Op0"/>
-                                            </connections>
                                         </button>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yxK-Pn-E3j">
+                                        <button opaque="NO" tag="104" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yxK-Pn-E3j">
                                             <rect key="frame" x="94" y="0.0" width="28" height="28"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="yxK-Pn-E3j" secondAttribute="height" multiplier="1:1" id="0cN-j9-6qL"/>
                                                 <constraint firstAttribute="width" constant="28" id="ay6-Mv-09X"/>
                                             </constraints>
                                             <state key="normal" image="next"/>
-                                            <connections>
-                                                <action selector="nextBtnTouched:" destination="-1" eventType="touchUpInside" id="f2K-dS-2K2"/>
-                                            </connections>
                                         </button>
                                     </subviews>
                                 </stackView>
@@ -265,9 +244,6 @@
                         <constraint firstAttribute="width" secondItem="BrR-BF-gho" secondAttribute="height" multiplier="1:1" id="ISh-V0-JOH"/>
                         <constraint firstAttribute="width" constant="43" id="Sfh-qS-XpB"/>
                     </constraints>
-                    <connections>
-                        <action selector="playerOpenBtnTouched:" destination="-1" eventType="touchUpInside" id="HxX-CY-5GI"/>
-                    </connections>
                 </button>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

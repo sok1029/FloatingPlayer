@@ -12,7 +12,23 @@ import UIKit
 class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        FloatingPlayer.shared.buttonImage.accept("buttonImage")
+        FloatingPlayer.shared.buttonImg.accept("buttonImage")
+        FloatingPlayer.shared.setEventHandler(open: {
+            print("openButton do")
+        },
+        prev: {
+            print("prevButton do")
+        },
+        next: {
+            print("nextButton do")
+        },
+        pause: {
+            print("pauseButton do")
+        }) {
+            print("playButton do")
+        }
+        
+        FloatingPlayer.shared.setPlayPauseImages(("pause","play"))
     }
     
     @IBAction func showBtnTouched(_ sender: Any) {
@@ -21,7 +37,5 @@ class ViewController: UIViewController {
     
     @IBAction func hideBtnTouched(_ sender: Any) {
         FloatingPlayer.shared.hideFloatingWindow()
-        FloatingPlayer.shared.buttonImage.accept("buttonImage2")
-
     }
 }
