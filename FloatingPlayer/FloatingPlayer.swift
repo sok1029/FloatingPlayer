@@ -16,7 +16,7 @@ public class FloatingPlayer {
     
     private var fltWindow: FloatingWindow!
     private var playerView: PlayerView?
-    private var isPlaying = BehaviorRelay<Bool>(value: false)
+    var isPlaying = BehaviorRelay<Bool>(value: false)
 
     private var dimBgView: UIView?
     
@@ -42,17 +42,16 @@ public class FloatingPlayer {
             }
         }).disposed(by: disposeBag)
         
-        self.isPlaying.asObservable().subscribe(onNext: { [weak self] (isPlaying) in
+        isPlaying.asObservable().subscribe(onNext: { [weak self] (isPlaying) in
             guard let sSelf = self else { return }
-          
+            
             if let imgs = sSelf.playPauseImgs{
-                let img = isPlaying ? (UIImage(named: imgs.play)) : (UIImage(named: imgs.pause))
+                let img = isPlaying ? (UIImage(named: imgs.pause)) : (UIImage(named: imgs.play))
                 sSelf.playerView?.getButton(subview: .pausePlay).setImage(img, for: .normal)
             }
             
             if let handlers = sSelf.handlers{
-                let act = isPlaying ? handlers.pause : handlers.play
-                act()
+                isPlaying ? handlers.play() : handlers.pause()
             }
         }).disposed(by: disposeBag)
     }
@@ -102,7 +101,7 @@ public class FloatingPlayer {
                 })
                 
                 //PlayerView
-                 playerView = {
+                playerView = {
                     let playerView: PlayerView = {
                         let frame: CGRect =  {
                             let p = (fltWindow.convert(fltWindow.topButton.frame.origin, to: appWindow))
@@ -110,11 +109,12 @@ public class FloatingPlayer {
                         }()
                         return PlayerView(frame: frame,type: fltWindow.settledDirection)
                     }()
+                    
                     //image
                     if let img = fltWindow.topButton.image(for: .normal){
                         playerView.setOpenButtonImage(img)
                     }
-                    //Event
+                    //event
                     for button in PlayerView.SubView.Button.allCases{
                         playerView.getButton(subview: button).rx.controlEvent([.touchUpInside])
                             .subscribe(onNext:{ [weak self] in
@@ -128,13 +128,10 @@ public class FloatingPlayer {
                         })
                         .disposed(by: disposeBag)
                     }
-
-//                    //        miniPlayerView?.prevMoveButton.isEnabled = WelaaaPlayerMangager.shared.isPrevItem()
-//                    //        miniPlayerView?.nextMoveButton.isEnabled = WelaaaPlayerMangager.shared.isNextItem()
-//
                     return playerView
                 }()
                 
+                isPlaying.accept(isPlaying.value)
                 self.playerView!.moveAnimation()
                 
                 appWindow.addSubview(dimBgView);

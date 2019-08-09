@@ -13,6 +13,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         FloatingPlayer.shared.buttonImg.accept("buttonImage")
+        FloatingPlayer.shared.setPlayPauseImages(("pause","play"))
+        FloatingPlayer.shared.isPlaying.accept(false)
+
         FloatingPlayer.shared.setEventHandler(open: {
             print("openButton do")
         },
@@ -28,7 +31,6 @@ class ViewController: UIViewController {
             print("playButton do")
         }
         
-        FloatingPlayer.shared.setPlayPauseImages(("pause","play"))
     }
     
     @IBAction func showBtnTouched(_ sender: Any) {
