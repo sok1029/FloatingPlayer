@@ -9,17 +9,20 @@
 //import Foundation
 import UIKit
 
-public enum PlayerControl{
-    case prev
-    case next
-    case toggle //play, pause
-}
 
-enum PlayerSubViews: Int{
-    case container = 100, openButton ,prevButton, pausePlayButton, nextButton
-}
+class PlayerView: UIView{
+    
+    enum SubView: Int{
+        case container = 100
 
-class PlayerView: UIView{    
+        enum Button: Int, CaseIterable{
+            static var allCases: [Button] {
+                return [.open, .prev, .pausePlay, .next]
+            }
+            case open = 101, prev, pausePlay, next
+        }
+    }
+
     //MARK: -Init
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -33,41 +36,33 @@ class PlayerView: UIView{
     private func set(with type: FloatingSettledDirection){
         //xib connect
         guard let xibName = NSStringFromClass(self.classForCoder).components(separatedBy: ".").last else { return }
-        
+
         let view: UIView = {
             let v = (type == .left) ?
             (Bundle.main.loadNibNamed(xibName, owner: self, options: nil)?.first as! UIView) :
             (Bundle.main.loadNibNamed(xibName, owner: self, options: nil)?.last as! UIView)
         
             v.frame = self.bounds
-            v.tag = PlayerSubViews.container.rawValue
+            v.tag = SubView.container.rawValue
             return v
         }()
         
         self.addSubview(view)
         
-        if let openButton  = self.viewWithTag(PlayerSubViews.openButton.rawValue){
+        if let openButton  = self.viewWithTag(SubView.Button.open.rawValue){
             openButton.layer.cornerRadius = fltBtnWidthHeight / 2
         }
     }
     
     func setOpenButtonImage(_ image: UIImage){
-        if let openbutton = self.viewWithTag(PlayerSubViews.openButton.rawValue) as? UIButton{
+        if let openbutton = self.viewWithTag(SubView.Button.open.rawValue) as? UIButton{
             openbutton.setImage(image, for: .normal)
         }
     }
     
-    func setPlayButtonImage(isPlaying: Bool){
-//        if isPlaying{
-//            playButton.setImage(UIImage.init(named: "miniPause"), for: .normal)
-//        }
-//        else{
-//            playButton.setImage(UIImage.init(named: "miniPlay"), for: .normal)
-//        }
-    }
     //MARK: -Animation
     func moveAnimation(){
-        if let constraints = self.viewWithTag(PlayerSubViews.container.rawValue)?.constraints{
+        if let constraints = self.viewWithTag(SubView.container.rawValue)?.constraints{
             for c in constraints {
                 if c.identifier  == "horizontalSpcWithSafeArea"{
                     c.constant += 10
@@ -78,20 +73,8 @@ class PlayerView: UIView{
         }
     }
     
-    func getOpenButton() -> UIButton{
-        return self.viewWithTag(PlayerSubViews.openButton.rawValue) as! UIButton
-    }
-    
-    func getPrevButton() -> UIButton{
-        return self.viewWithTag(PlayerSubViews.prevButton.rawValue) as! UIButton
-    }
-    
-    func getPausePlayButton() -> UIButton{
-        return self.viewWithTag(PlayerSubViews.pausePlayButton.rawValue) as! UIButton
-    }
-    
-    func getNextButton() -> UIButton{
-        return self.viewWithTag(PlayerSubViews.nextButton.rawValue) as! UIButton
+    func getButton(subview: SubView.Button) -> UIButton{
+        return self.viewWithTag(subview.rawValue) as! UIButton
     }
     
 }

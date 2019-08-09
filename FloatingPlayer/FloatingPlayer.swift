@@ -7,9 +7,6 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-//typealias Handlers = (prev: () -> (), next: () -> (), pause: () -> (), play: () -> ())
-//typealias PlayPauseImges = (pause: String, play: String)
-
 public class FloatingPlayer {
     let disposeBag = DisposeBag()
 
@@ -27,7 +24,7 @@ public class FloatingPlayer {
     private var playPauseImgs:  (pause: String, play: String)?
     
     lazy var buttonImg = BehaviorRelay<String>(value: "")
-
+    
     //MARK: -Init
     private init() {
         self.fltWindow = FloatingWindow()
@@ -50,7 +47,7 @@ public class FloatingPlayer {
           
             if let imgs = sSelf.playPauseImgs{
                 let img = isPlaying ? (UIImage(named: imgs.play)) : (UIImage(named: imgs.pause))
-                sSelf.playerView?.getPausePlayButton().setImage(img, for: .normal)
+                sSelf.playerView?.getButton(subview: .pausePlay).setImage(img, for: .normal)
             }
             
             if let handlers = sSelf.handlers{
@@ -117,40 +114,24 @@ public class FloatingPlayer {
                     if let img = fltWindow.topButton.image(for: .normal){
                         playerView.setOpenButtonImage(img)
                     }
-                        //Event
-                    playerView.getOpenButton().rx.controlEvent([.touchUpInside])
-                        .subscribe(onNext: { [weak self] in
-                            if let handlers = self?.handlers{
-                                handlers.open()
-                            }
-                        })
-                        .disposed(by: disposeBag)
-                    
-                    playerView.getPrevButton().rx.controlEvent([.touchUpInside])
-                        .subscribe(onNext: { [weak self] in
-                            if let handlers = self?.handlers{
-                                handlers.prev()
-                            }
-                        })
-                        .disposed(by: disposeBag)
-                    
-                    playerView.getNextButton().rx.controlEvent([.touchUpInside])
-                        .subscribe(onNext: { [weak self] in
-                            if let handlers = self?.handlers{
-                                handlers.next()
-                            }
-                        })
-                        .disposed(by: disposeBag)
-                    
-                    playerView.getPausePlayButton().rx.controlEvent([.touchUpInside])
-                        .subscribe(onNext: { [weak self] in
+                    //Event
+                    for button in PlayerView.SubView.Button.allCases{
+                        playerView.getButton(subview: button).rx.controlEvent([.touchUpInside])
+                            .subscribe(onNext:{ [weak self] in
                             guard let sSelf = self else { return }
-                            sSelf.isPlaying.accept(!sSelf.isPlaying.value)
+                            switch button{
+                            case .open: sSelf.handlers?.open()
+                            case .prev: sSelf.handlers?.prev()
+                            case .next: sSelf.handlers?.next()
+                            case .pausePlay: { sSelf.isPlaying.accept(!sSelf.isPlaying.value) }()
+                            }
                         })
                         .disposed(by: disposeBag)
-                    //        miniPlayerView?.prevMoveButton.isEnabled = WelaaaPlayerMangager.shared.isPrevItem()
-                    //        miniPlayerView?.nextMoveButton.isEnabled = WelaaaPlayerMangager.shared.isNextItem()
-                    
+                    }
+
+//                    //        miniPlayerView?.prevMoveButton.isEnabled = WelaaaPlayerMangager.shared.isPrevItem()
+//                    //        miniPlayerView?.nextMoveButton.isEnabled = WelaaaPlayerMangager.shared.isNextItem()
+//
                     return playerView
                 }()
                 

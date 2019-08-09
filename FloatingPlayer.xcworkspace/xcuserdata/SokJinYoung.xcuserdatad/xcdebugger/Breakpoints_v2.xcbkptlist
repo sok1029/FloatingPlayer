@@ -9,14 +9,90 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
+            filePath = "FloatingPlayer/PlayerView.swift"
+            timestampString = "587015535.957316"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "81"
+            endingLineNumber = "81">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FloatingPlayer/PlayerView.swift"
+            timestampString = "587015535.957372"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "81"
+            endingLineNumber = "81">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
             filePath = "FloatingPlayer/ViewController.swift"
-            timestampString = "586952663.217665"
+            timestampString = "587015669.453993"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "6"
             endingLineNumber = "6"
             landmarkName = "unknown"
             landmarkType = "0">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FloatingPlayer/FloatingPlayer.swift"
+            timestampString = "587015669.454048"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "60"
+            endingLineNumber = "60"
+            landmarkName = "FloatingPlayer"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "FloatingPlayer.FloatingPlayer.() -&gt; FloatingPlayer.FloatingPlayer(in _A9CA82EFB0CA6874F9DF18CDC82C7C89).init() -&gt; FloatingPlayer.FloatingPlayer"
+                  moduleName = "FloatingPlayer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/SokJinYoung/Desktop/FloatingPlayer/FloatingPlayer/FloatingPlayer.swift"
+                  timestampString = "587014526.4411809"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "74"
+                  endingLineNumber = "74"
+                  offsetFromSymbolStart = "3572">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #3 (Swift.Bool) -&gt; () in FloatingPlayer.FloatingPlayer.() -&gt; FloatingPlayer.FloatingPlayer(in _A9CA82EFB0CA6874F9DF18CDC82C7C89).init() -&gt; FloatingPlayer.FloatingPlayer"
+                  moduleName = "FloatingPlayer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/SokJinYoung/Desktop/FloatingPlayer/FloatingPlayer/FloatingPlayer.swift"
+                  timestampString = "587014526.443288"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "74"
+                  endingLineNumber = "74"
+                  offsetFromSymbolStart = "2433">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
