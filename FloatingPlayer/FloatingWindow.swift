@@ -79,23 +79,21 @@ class FloatingWindow : UIWindow {
     //MARK: -HandleFloating
     @objc func handleFloating(panGesture: UIPanGestureRecognizer) {
         guard let appWindow = (UIApplication.shared.delegate as? AppDelegate)?.window else { return }
+        //limit
+        let fltHalfHeight = topButton.frame.size.height / 2.0
+        
+        func getTopMoveLimitCenter() -> CGFloat { return appWindow.safeAreaInsets.top + fltHalfHeight }
+        func getBottomMoveLimitCenter() -> CGFloat { return  UIScreen.main.bounds.height - appWindow.safeAreaInsets.bottom - fltHalfHeight }
         
         func getFloatingWindowCenterPoint() -> CGPoint {
             let fingerP: CGPoint = {
                 let location = panGesture.location(in: topButton)
                 return self.convert(location, to: appWindow)
             }()
-            //limit
-            //        let tapbbarHeight: CGFloat = 49.0
-            let fltHalfHeight = topButton.frame.size.height / 2.0
-            let topLimitCenterY = appWindow.safeAreaInsets.top + fltHalfHeight
-            let bottomLimitCenterY = UIScreen.main.bounds.height - appWindow.safeAreaInsets.bottom - fltHalfHeight
-        
             var windowCenterP = fingerP
 
-            if fingerP.y < topLimitCenterY { windowCenterP.y = topLimitCenterY  }
-            else if fingerP.y > bottomLimitCenterY { windowCenterP.y = bottomLimitCenterY }
-        
+            if fingerP.y < getTopMoveLimitCenter() { windowCenterP.y = getTopMoveLimitCenter()  }
+            else if fingerP.y > getBottomMoveLimitCenter() { windowCenterP.y = getBottomMoveLimitCenter() }
             return windowCenterP
         }
         
@@ -109,24 +107,31 @@ class FloatingWindow : UIWindow {
             })
         }
         else if panGesture.state == .ended {
+            let topSettledLimitY: CGFloat = getTopMoveLimitCenter() + 50
+            let bottomSettledLimitY: CGFloat = getBottomMoveLimitCenter() - 50
+            
             let windowCenterP = getFloatingWindowCenterPoint()
+            
             let fltHalfWidth = topButton.frame.size.width / 2.0
-            let wasButtonOverHalf = windowCenterP.x < (UIScreen.main.bounds.width / 2.0) ? false : true
+            let wasButtonOverHalf =  (windowCenterP.x < (UIScreen.main.bounds.width / 2.0)) ? false: true
             
+            let x = wasButtonOverHalf ? UIScreen.main.bounds.width - fltHalfWidth : fltHalfWidth
+            var y = windowCenterP.y
+            
+            if y == getTopMoveLimitCenter() { y = topSettledLimitY }
+            else if y == getBottomMoveLimitCenter() { y = bottomSettledLimitY }
+
             //left,right decision
-            UIView.animate(withDuration: 0.2, delay: 0.0, options: [.beginFromCurrentState,.curveEaseInOut], animations: {
-                [weak self] in
+            UIView.animate(withDuration: 0.2, delay: 0.0, options: [.beginFromCurrentState,.curveEaseInOut],
+                           animations: { [weak self] in
+                self?.center = CGPoint(x: x, y: y)
+            })
+            { [weak self] (c)  in
                 guard let sSelf = self else { return }
-                sSelf.center = wasButtonOverHalf ?
-                    CGPoint(x: UIScreen.main.bounds.width - fltHalfWidth, y: windowCenterP.y):
-                    CGPoint(x: fltHalfWidth, y: windowCenterP.y)
-            }) { [weak self] (c)  in
-                self?.dragging = false
-                self?.settledDirection = wasButtonOverHalf ? .right : .left
+                sSelf.dragging = false
+                sSelf.settledDirection = wasButtonOverHalf ? .right : .left
+                sSelf.winCenterLocYInScreen = sSelf.center.y / UIScreen.main.bounds.height
             }
-            
-            winCenterLocYInScreen = center.y / UIScreen.main.bounds.height
         }
-      
     }
 }
