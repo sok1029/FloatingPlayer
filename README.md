@@ -1,7 +1,8 @@
 # FloatingPlayer
-This repository is simplest menu navigation. 
+This is a floating player that can be used by connecting your player.
 
-<img alt="Demo" src="/resources/demo.gif?raw=true" width="290">&nbsp;
+
+<img alt="Demo" src="/resources/demo.GIF?raw=true" width="290">&nbsp;
 
 
 ## Usage
@@ -18,24 +19,18 @@ FloatingPlayer.shared.isPlaying.accept(false)
 
 //connect your player to floatingPlayer
 FloatingPlayer.shared.setEventHandler(open: {
-
-//input your openButton Act
-print("openButton Act")
+ //input your openButton Act
 },
 prev: {
-//input your prevButton Act
-print("prevButton act")
+ //input your prevButton Act
 },
 next: {
-//input your nextButton Act
-print("nextButton act")
+ //input your nextButton Act
 },
 pause: {
-//input your pauseButton Act
-print("pauseButton act")
+ //input your pauseButton Act
 }) {
-//input your playButton Act
-print("playButton act")
+ //input your playButton Act
 }
 
 //show floating
