@@ -8,36 +8,41 @@
 
 import UIKit
 
-
 class ViewController: UIViewController {
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+    
         FloatingPlayer.shared.buttonImg.accept("buttonImage")
-        FloatingPlayer.shared.setPlayPauseImages(("pause","play"))
+        FloatingPlayer.shared.setImages(("pause","play","prev","next"))
         FloatingPlayer.shared.isPlaying.accept(false)
 
         FloatingPlayer.shared.setEventHandler(open: {
-            print("openButton do")
+            //input your openButton Act
+            print("openButton Act")
         },
         prev: {
-            print("prevButton do")
+            //input your prevButton Act
+            print("prevButton act")
         },
         next: {
-            print("nextButton do")
+            //input your nextButton Act
+            print("nextButton act")
         },
         pause: {
-            print("pauseButton do")
+            //input your pauseButton Act
+            print("pauseButton act")
         }) {
-            print("playButton do")
+            //input your playButton Act
+            print("playButton act")
         }
-        
     }
     
     @IBAction func showBtnTouched(_ sender: Any) {
-        FloatingPlayer.shared.showFloatingWindow()
+        FloatingPlayer.shared.showFloating()
     }
     
     @IBAction func hideBtnTouched(_ sender: Any) {
-        FloatingPlayer.shared.hideFloatingWindow()
+        FloatingPlayer.shared.hideFloating()
     }
 }

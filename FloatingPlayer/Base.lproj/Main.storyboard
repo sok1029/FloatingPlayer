@@ -35,21 +35,23 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="StO-Dl-z3e">
-                                <rect key="frame" x="148.5" y="460" width="117" height="30"/>
+                                <rect key="frame" x="124.5" y="455.5" width="165" height="39"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rst-fL-0L1">
-                                        <rect key="frame" x="0.0" y="0.0" width="37" height="30"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="60" height="39"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="37" id="sMb-V9-O6D"/>
+                                            <constraint firstAttribute="width" constant="60" id="sMb-V9-O6D"/>
                                         </constraints>
-                                        <state key="normal" title="show"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                        <state key="normal" title="Show"/>
                                         <connections>
                                             <action selector="showBtnTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="B10-bC-anI"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8jW-Jq-L9n">
-                                        <rect key="frame" x="87" y="0.0" width="30" height="30"/>
-                                        <state key="normal" title="hide"/>
+                                        <rect key="frame" x="120" y="0.0" width="45" height="39"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                        <state key="normal" title="Hide"/>
                                         <connections>
                                             <action selector="hideBtnTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="vwY-IG-MS2"/>
                                         </connections>
@@ -59,7 +61,7 @@
                                 <constraints>
                                     <constraint firstItem="Rst-fL-0L1" firstAttribute="top" secondItem="StO-Dl-z3e" secondAttribute="top" id="9mW-uY-jrU"/>
                                     <constraint firstAttribute="bottom" secondItem="Rst-fL-0L1" secondAttribute="bottom" id="JC5-Qt-Umf"/>
-                                    <constraint firstItem="8jW-Jq-L9n" firstAttribute="leading" secondItem="Rst-fL-0L1" secondAttribute="trailing" constant="50" id="R5B-q3-eZn"/>
+                                    <constraint firstItem="8jW-Jq-L9n" firstAttribute="leading" secondItem="Rst-fL-0L1" secondAttribute="trailing" constant="60" id="R5B-q3-eZn"/>
                                     <constraint firstItem="Rst-fL-0L1" firstAttribute="leading" secondItem="StO-Dl-z3e" secondAttribute="leading" id="Xq5-Md-weQ"/>
                                     <constraint firstItem="8jW-Jq-L9n" firstAttribute="top" secondItem="StO-Dl-z3e" secondAttribute="top" id="oOs-WQ-62t"/>
                                     <constraint firstAttribute="bottom" secondItem="8jW-Jq-L9n" secondAttribute="bottom" id="r61-8d-3bf"/>
@@ -67,19 +69,28 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HBe-Fq-NGb">
-                                <rect key="frame" x="191" y="550" width="32" height="30"/>
+                                <rect key="frame" x="184.5" y="554.5" width="45" height="39"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                 <state key="normal" title="Next"/>
                                 <connections>
                                     <segue destination="boC-uT-Bs5" kind="show" id="d23-JT-NrS"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="FloatingPlayer Sample" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cuC-oh-dvW">
+                                <rect key="frame" x="81" y="188" width="252" height="29"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="StO-Dl-z3e" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="ErD-bD-g6U"/>
                             <constraint firstItem="HBe-Fq-NGb" firstAttribute="top" secondItem="StO-Dl-z3e" secondAttribute="bottom" constant="60" id="P1H-3n-6Gs"/>
+                            <constraint firstItem="cuC-oh-dvW" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="100" id="SSy-NK-lOj"/>
                             <constraint firstItem="StO-Dl-z3e" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="VC2-Zq-kcd"/>
                             <constraint firstItem="HBe-Fq-NGb" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="XN2-dW-dEI"/>
+                            <constraint firstItem="cuC-oh-dvW" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="sGA-0e-Zpx"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -92,7 +103,6 @@
         <!--View Controller-->
         <scene sceneID="Xrg-42-Ip5">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="tTq-E8-rf1" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="boC-uT-Bs5" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="oks-Bz-0Lv">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
@@ -101,6 +111,7 @@
                         <viewLayoutGuide key="safeArea" id="7cF-0D-oxJ"/>
                     </view>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tTq-E8-rf1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="913" y="143"/>
         </scene>

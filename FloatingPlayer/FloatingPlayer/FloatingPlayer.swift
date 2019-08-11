@@ -21,7 +21,7 @@ public class FloatingPlayer {
     private var dimBgView: UIView?
     
     private var handlers: (open: () -> (), prev: () -> (), next: () -> (), pause: () -> (), play: () -> ())?
-    private var playPauseImgs:  (pause: String, play: String)?
+    private var imgs: (pause: String, play: String, prev: String, next: String)?
     
     lazy var buttonImg = BehaviorRelay<String>(value: "")
     
@@ -45,7 +45,7 @@ public class FloatingPlayer {
         isPlaying.asObservable().subscribe(onNext: { [weak self] (isPlaying) in
             guard let sSelf = self else { return }
             
-            if let imgs = sSelf.playPauseImgs{
+            if let imgs = sSelf.imgs{
                 let img = isPlaying ? (UIImage(named: imgs.pause)) : (UIImage(named: imgs.play))
                 sSelf.playerView?.getButton(subview: .pausePlay).setImage(img, for: .normal)
             }
@@ -61,12 +61,12 @@ public class FloatingPlayer {
         handlers = (open: open, prev: prev, next: next, pause: pause, play: play)
     }
     //MARK - PlayPauseimages
-    func setPlayPauseImages(_ images:(pause: String, play: String)){
-        playPauseImgs = images
+    func setImages(_ images: (pause: String, play: String, prev: String, next: String)){
+        imgs = images
     }
     
     //MARK: -FloatingWindow
-    public func showFloatingWindow() {
+    public func showFloating() {
         if fltWindow.isHidden {
             fltWindow.makeKeyAndVisible()
             fltWindow.addSubview(fltWindow.topButton)
@@ -74,7 +74,7 @@ public class FloatingPlayer {
         }
     }
     
-    public func hideFloatingWindow() {
+    public func hideFloating() {
         fltWindow.isHidden = true
         fltWindow.topButton.removeFromSuperview()
     }
@@ -83,7 +83,7 @@ public class FloatingPlayer {
     private func showPlayer() {
         if !fltWindow.dragging, !fltWindow.isHidden{
             if let appWindow = (UIApplication.shared.delegate as! AppDelegate).window{
-                hideFloatingWindow()
+                hideFloating()
                
                 //background dimView(=diableView)
                 let dimBgView: UIView = {
@@ -141,7 +141,7 @@ public class FloatingPlayer {
     }
     
     @objc func removePlayer(_ sender: UITapGestureRecognizer){
-        showFloatingWindow()
+        showFloating()
         dimBgView?.removeFromSuperview()
         playerView = nil
     }

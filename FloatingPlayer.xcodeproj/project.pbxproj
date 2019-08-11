@@ -101,6 +101,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3E32636722FFEAD900F02E51 /* FloatingPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				3ED6AADC22ED4A5500C650B0 /* FloatingPlayer.swift */,
+				3E1B508122F2D9B0003AF2D3 /* FloatingWindow.swift */,
+				3EC77B5C22ED4D0C004C2033 /* FloatingPlayerViewController.swift */,
+				3EC77B5622ED4C1E004C2033 /* PlayerView.swift */,
+				3EC77B5A22ED4CE6004C2033 /* PlayerView.xib */,
+			);
+			path = FloatingPlayer;
+			sourceTree = "<group>";
+		};
 		3ED6AAA222ED499C00C650B0 = {
 			isa = PBXGroup;
 			children = (
@@ -126,15 +138,11 @@
 		3ED6AAAD22ED499C00C650B0 /* FloatingPlayer */ = {
 			isa = PBXGroup;
 			children = (
+				3E32636722FFEAD900F02E51 /* FloatingPlayer */,
 				3E4441E922F02B9A00CB59E8 /* DesignableView.swift */,
 				3ED6AAAE22ED499C00C650B0 /* AppDelegate.swift */,
 				3ED6AAB022ED499C00C650B0 /* ViewController.swift */,
 				3ED6AAB222ED499C00C650B0 /* Main.storyboard */,
-				3ED6AADC22ED4A5500C650B0 /* FloatingPlayer.swift */,
-				3E1B508122F2D9B0003AF2D3 /* FloatingWindow.swift */,
-				3EC77B5C22ED4D0C004C2033 /* FloatingPlayerViewController.swift */,
-				3EC77B5622ED4C1E004C2033 /* PlayerView.swift */,
-				3EC77B5A22ED4CE6004C2033 /* PlayerView.xib */,
 				3ED6AAB722ED499D00C650B0 /* LaunchScreen.storyboard */,
 				3ED6AABA22ED499D00C650B0 /* Info.plist */,
 				3ED6AAB522ED499D00C650B0 /* Assets.xcassets */,
