@@ -7,39 +7,52 @@ This is a floating player that can be used by connecting your player.
 
 ## Usage
 
+### Configuration
+
 ```swift
-//set your floating Image
+// Set your floating Image
 FloatingPlayer.shared.buttonImg.accept("buttonImage")
 
-//set your player controller images
+// Set your player controller images
 FloatingPlayer.shared.setImages(("pause","play","prev","next"))
 
-//set first Player Status Pause or Play
+// Set player status. Pause or Play
 FloatingPlayer.shared.isPlaying.accept(false)
 
-//connect your player to floatingPlayer
+// Connect your player to floatingPlayer
 FloatingPlayer.shared.setEventHandler(open: {
- //input your openButton Act
+ // Input your openButton Act
 },
 prev: {
- //input your prevButton Act
+ // Input your prevButton Act
 },
 next: {
- //input your nextButton Act
+ // Input your nextButton Act
 },
 pause: {
- //input your pauseButton Act
+ // Input your pauseButton Act
 }) {
- //input your playButton Act
+ // Input your playButton Act
 }
+```
+### Show  ,  Hide
 
-//show floating
+```swift
+// Show floating
 FloatingPlayer.shared.showFloating()
 
-//hide floating
+// Hide floating
 FloatingPlayer.shared.hideFloating()
 
 ```
+
+## Requirements
+
+* iOS 11
+
+## Dependencies
+
+* [RxSwift](https://github.com/ReactiveX/RxSwift) >= 5.0
 
 ## Author
 
